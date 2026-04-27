@@ -1,0 +1,3 @@
+export type TIconName = 'home' | 'bookOpen' | 'calendar' | 'barChart' | 'arrowLeft' | 'plus' | 
+'trash' | 'edit' | 'x' | 'folderOpen' | 'fileText' | 'chevronDown' | 
+'chevronRight' | 'checkCircle' | 'xCircle' | 'clock' | 'rotate' | 'trendingUp'

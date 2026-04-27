@@ -1,0 +1,141 @@
+:root {
+  /* Purple - основная палитра */
+  --bg-purple-10: #E9D4FF;
+  --bg-purple-50: #faf5ff;
+  --bg-purple-100: #f3e8ff;
+  --bg-purple-200: #e9d5ff;
+  --bg-purple-300: #d8b4fe;
+  --bg-purple-400: #c084fc;
+  --bg-purple-500: #a855f7;
+  --bg-purple-600: #9333ea;
+  --bg-purple-700: #7e22ce;
+  --bg-purple-800: #6b21a8;
+  --bg-purple-900: #581c87;
+
+  --text-purple-100: #f3e8ff;
+  --text-purple-500: #a855f7;
+  --text-purple-600: #9333ea;
+  --text-purple-700: #8200DB;
+  --text-purple-800: #6b21a8;
+  --text-purple-900: #581c87;
+
+  /* Pink - просроченные карточки */
+  --bg-pink-50: #FDF2F8;
+  --bg-pink-100: #fce7f3;
+  --bg-pink-200: #fbcfe8;
+  --bg-pink-300: #f9a8d4;
+  --bg-pink-500: #FB64B6;
+  --bg-pink-700: #be185d;
+  --text-pink-700: #be185d;
+  --text-pink-900: #831843;
+
+  /* Yellow - новые/сегодня */
+  --bg-yellow-100: #fef3c7;
+  --bg-yellow-300: #fcd34d;
+  --bg-yellow-700: #a16207;
+  --text-yellow-700: #a16207;
+  --text-yellow-900: #713f12;
+
+  /* Blue - прогресс, информация */
+  --bg-blue-50: #eff6ff;
+  --bg-blue-100: #dbeafe;
+  --bg-blue-200: #bfdbfe;
+  --bg-blue-700: #1d4ed8;
+  --bg-blue-900: #1e3a8a;
+  --text-blue-600: #2563eb;
+  --text-blue-700: #1d4ed8;
+  --text-blue-900: #1e3a8a;
+
+  /* Green - успех, "Помню" */
+  --bg-green-100: #dcfce7;
+  --bg-green-200: #bbf7d0;
+  --bg-green-700: #15803d;
+  --text-green-700: #15803d;
+  --text-green-800: #166534;
+
+  /* Red - ошибки, "Не помню", удаление */
+  --bg-red-100: #fee2e2;
+  --bg-red-200: #fecaca;
+  --bg-red-600: #dc2626;
+  --bg-red-700: #b91c1c;
+  --text-red-600: #dc2626;
+  --text-red-700: #b91c1c;
+
+  /* Orange - цвет папки "Персиковый" */
+  --bg-orange-200: #fed7aa;
+
+  /* Violet - цвет папки "Сиреневый" */
+  --bg-violet-200: #ddd6fe;
+
+  /* Gray - нейтральный текст, метаданные */
+  --text-gray-500: #6b7280;
+  --text-gray-600: #4b5563;
+  --text-gray-700: #374151;
+
+  /* White */
+  --bg-white: #ffffff;
+  --text-white: #ffffff;
+
+  /* Border colors */
+  --border-purple-100: #f3e8ff;
+  --border-purple-200: #e9d5ff;
+  --border-purple-400: #c084fc;
+  --border-gray-200: #e5e7eb;
+
+  /* Border radius */
+  --radius-lg: 0.5rem;      /* 8px - малые бейджи */
+  --radius-xl: 0.75rem;     /* 12px - селекты, даты */
+  --radius-2xl: 1rem;       /* 16px - поля ввода, подсветка текста */
+  --radius-3xl: 1.5rem;     /* 24px - карточки, формы */
+  --radius-full: 9999px;    /* кнопки */
+
+  /* Spacing */
+  --gap-2: 0.5rem;          /* 8px */
+  --gap-3: 0.75rem;         /* 12px */
+  --gap-4: 1rem;            /* 16px */
+  --gap-6: 1.5rem;          /* 24px */
+  
+  --padding-2: 0.5rem;      /* 8px */
+  --padding-3: 0.75rem;     /* 12px */
+  --padding-4: 1rem;        /* 16px */
+  --padding-6: 1.5rem;      /* 24px */
+
+  /* Typography */
+  --text-xs: 0.75rem;       /* 12px */
+  --text-sm: 0.875rem;      /* 14px */
+  --text-base: 1rem;        /* 16px */
+  --text-lg: 1.125rem;      /* 18px */
+  --text-xl: 1.25rem;       /* 20px */
+  --text-2xl: 1.5rem;       /* 24px */
+  --text-3xl: 1.875rem;     /* 30px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --line-height-relaxed: 1.625;
+  --line-height-normal: 1.5;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+@font-face {
+  font-family: "Expressway";
+  src: local("Expressway"),
+    local("Expressway"),
+    url("../assets/fonts/Expressway.ttf") format("opentype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Futurespore";
+  src: local("Futurespore-cyrillic"),
+    local("Futurespore-cyrillic"),
+    url("../assets/fonts/Futurespore-cyrillic.otf") format("opentype");
+  font-weight: normal;
+}
+
+body {
+  font-family: Expressway;
+}
