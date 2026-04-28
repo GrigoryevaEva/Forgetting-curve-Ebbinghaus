@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
-
+    import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
 </script>
 
 <template>
@@ -9,7 +8,10 @@ import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
             <h3>Время повторить!</h3>
             <p>{} карточка ждут вас</p>
         </div>
-        <IconSprite name="clock" class="icon" />
+        <IconSprite
+            name="clock"
+            class="icon"
+        />
     </div>
 </template>
 

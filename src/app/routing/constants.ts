@@ -1,30 +1,30 @@
-import type { TIconName } from "@/shared/ui/assets/icons/types"
+import type { TIconName } from '@/shared/ui/assets/icons/types';
 
 type TNavItem = {
-    icon: TIconName
-    name: string
-    path: string
-}
+    icon: TIconName;
+    name: string;
+    path: string;
+};
 
-export const navItems: TNavItem[] = [ 
+export const navItems: TNavItem[] = [
     {
         icon: 'home',
         name: 'Sections',
-        path: '/'
-    }, 
+        path: '/',
+    },
     {
         icon: 'bookOpen',
         name: 'Repetition',
-        path: '/repetition'
-    }, 
+        path: '/repetition',
+    },
     {
         icon: 'calendar',
         name: 'Plan',
-        path: '/plan'
-    }, 
+        path: '/plan',
+    },
     {
         icon: 'barChart',
         name: 'Statistics',
-        path: '/statistics'
+        path: '/statistics',
     },
-]
+];

@@ -1,38 +1,52 @@
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue';
-import CustomButton from './CustomButton.vue';
-import { useMouseInElement } from '@vueuse/core';
+    import { computed, useTemplateRef } from 'vue';
 
-    type Status = 'ok' | 'yellow' | 'red'
+    import { useMouseInElement } from '@vueuse/core';
+
+    import CustomButton from './CustomButton.vue';
+
+    type Status = 'ok' | 'yellow' | 'red';
     interface Props {
-        hover?: boolean
-        status?: Status
+        hover?: boolean;
+        status?: Status;
     }
 
     const props = withDefaults(defineProps<Props>(), {
         hover: true,
-        status: 'ok'
-    })
+        status: 'ok',
+    });
 
-    const isBorder = computed(() => props.status !== 'ok')
+    const isBorder = computed(() => props.status !== 'ok');
 
-    const container = useTemplateRef('container')
-    const { isOutside } = useMouseInElement(container)
+    const container = useTemplateRef('container');
+    const { isOutside } = useMouseInElement(container);
 </script>
 
 <template>
-    <div 
+    <div
+        ref="container"
         class="root"
         :class="{
             ['hover']: props.hover,
             [props.status]: isBorder,
         }"
-        ref="container"
     >
         <slot></slot>
-        <div class="buttonsContainer" v-if="props.hover" v-show="!isOutside">
-            <CustomButton theme="blue" icon="edit" :shadow="false" />
-            <CustomButton theme="red" icon="trash" :shadow="false" />
+        <div
+            v-if="props.hover"
+            v-show="!isOutside"
+            class="buttonsContainer"
+        >
+            <CustomButton
+                theme="blue"
+                icon="edit"
+                :shadow="false"
+            />
+            <CustomButton
+                theme="red"
+                icon="trash"
+                :shadow="false"
+            />
         </div>
     </div>
 </template>

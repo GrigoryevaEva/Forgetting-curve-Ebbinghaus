@@ -1,9 +1,10 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>Plan</div>
+    <div class="root">PLAN</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+    .root {
+    }
 </style>

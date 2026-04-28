@@ -1,1 +1,1 @@
-export const headers = {}
+export const headers = {};

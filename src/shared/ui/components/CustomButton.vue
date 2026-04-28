@@ -1,31 +1,38 @@
 <script setup lang="ts">
-import IconSprite from '../assets/icons/IconSprite.vue'
-import type { TIconName } from '../assets/icons/types'
+    import IconSprite from '../assets/icons/IconSprite.vue';
+    import type { TIconName } from '../assets/icons/types';
 
-    type Themes = 'main' | 'secondary' | 'transparent' | 'blue' | 'red' | 'green'
+    type Themes = 'main' | 'secondary' | 'transparent' | 'blue' | 'red' | 'green';
     interface Props {
-        icon?: TIconName
-        text?: string
-        theme?: Themes
-        shadow?: boolean
+        icon?: TIconName;
+        text?: string;
+        theme?: Themes;
+        shadow?: boolean;
     }
 
     const props = withDefaults(defineProps<Props>(), {
+        icon: undefined,
+        text: undefined,
         theme: 'main',
         shadow: true,
-    })
+    });
 </script>
 
 <template>
-    <div 
+    <div
         class="container"
         :class="{
             [props.theme]: props.theme,
             ['shadow']: props.shadow,
         }"
     >
-        <IconSprite v-if="props.icon" :name="props.icon" class="icon" width="16"/>
-        <p v-if="props.text" >{{ props.text }}</p>
+        <IconSprite
+            v-if="props.icon"
+            :name="props.icon"
+            class="icon"
+            width="16"
+        />
+        <p v-if="props.text">{{ props.text }}</p>
     </div>
 </template>
 
@@ -55,7 +62,8 @@ import type { TIconName } from '../assets/icons/types'
         &:hover {
             background-color: var(--bg-purple-500);
         }
-        .icon, p {
+        .icon,
+        p {
             color: var(--text-white);
         }
     }
@@ -65,7 +73,8 @@ import type { TIconName } from '../assets/icons/types'
         &:hover {
             background-color: var(--bg-blue-200);
         }
-        .icon, p {
+        .icon,
+        p {
             color: var(--text-blue-600);
         }
     }
@@ -75,7 +84,8 @@ import type { TIconName } from '../assets/icons/types'
         &:hover {
             background-color: var(--bg-red-200);
         }
-        .icon, p {
+        .icon,
+        p {
             color: var(--text-red-600);
         }
     }

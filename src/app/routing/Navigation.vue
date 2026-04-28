@@ -1,10 +1,11 @@
 <script setup lang="ts">
-    import { navItems } from './constants';
     import IconSprite from '@shared/ui/assets/icons/IconSprite.vue';
+
     import { useBreakpoints } from '@/composables';
 
-    const { isMobileAndTablet } = useBreakpoints()
+    import { navItems } from './constants';
 
+    const { isMobileAndTablet } = useBreakpoints();
 </script>
 
 <template>
@@ -14,11 +15,15 @@
     >
         <RouterLink
             v-for="item in navItems"
+            :key="item.path"
             :to="item.path"
             class="item"
             :class="{ itemMobile: isMobileAndTablet }"
         >
-            <IconSprite :name="item.icon" class="icon" />
+            <IconSprite
+                :name="item.icon"
+                class="icon"
+            />
             <p>{{ item.name }}</p>
         </RouterLink>
     </nav>
