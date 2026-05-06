@@ -15,7 +15,7 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
     .container {
         display: flex;
         align-items: center;
@@ -31,27 +31,29 @@
         transition: box-shadow 0.2s;
 
         cursor: pointer;
-    }
-    .container:hover {
-        box-shadow: var(--shadow-lg);
-        transition: all 0.2s;
-    }
-    .containerInfo {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-2);
-    }
-    .containerInfo h3 {
-        font-size: var(--text-xl);
-        color: var(--text-white);
-    }
-    .containerInfo p {
-        color: var(--text-purple-100);
-    }
-    .icon {
-        height: 3rem;
-        width: 3rem;
 
-        color: var(--bg-purple-10);
+        &:hover {
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s;
+        }
+
+        .containerInfo {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-2);
+        }
+        .icon {
+            height: 3rem;
+            width: 3rem;
+
+            color: var(--bg-purple-100);
+        }
+        h3 {
+            font-size: var(--text-xl);
+            color: var(--text-white);
+        }
+        p {
+            color: var(--text-purple-100);
+        }
     }
 </style>

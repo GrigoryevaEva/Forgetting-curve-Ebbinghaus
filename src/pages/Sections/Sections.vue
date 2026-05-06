@@ -8,7 +8,7 @@
 <template>
     <TimeRepetitionLabel />
     <div class="controlContainer">
-        <p>Мои разделы</p>
+        <h2>Мои разделы</h2>
         <CustomButton
             icon="plus"
             text="Новый раздел"
