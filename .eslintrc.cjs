@@ -29,7 +29,6 @@ module.exports = {
         quotes: [ 'error', 'single', { avoidEscape: true, allowTemplateLiterals: true } ],
         'object-curly-spacing': [ 'error', 'always' ],
         'block-spacing': [ 'error', 'always' ],
-        'array-bracket-spacing': [ 'error', 'always' ],
         'vue/max-attributes-per-line': [
             'error',
             {
