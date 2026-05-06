@@ -28,9 +28,9 @@
                     </div>
                 </div>
                 <div class="sectionInfo">
-                    <h2>
+                    <h3>
                         {{ section.name }}
-                    </h2>
+                    </h3>
                     <p class="count">{{ section.cards.length }} карточки</p>
                     <p
                         v-if="testNew"
@@ -54,6 +54,7 @@
     .root {
         display: flex;
         gap: var(--gap-4);
+        flex-wrap: wrap;
         .section {
             display: flex;
             gap: var(--gap-4);
@@ -75,6 +76,14 @@
 
                 .overdue {
                     color: var(--text-red-600);
+                }
+
+                p {
+                    font-size: var(--text-sm);
+                }
+
+                h3 {
+                    font-size: var(--text-lg);
                 }
             }
         }

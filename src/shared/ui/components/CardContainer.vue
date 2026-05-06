@@ -48,7 +48,8 @@
 
 <style scoped lang="scss">
     .root {
-        position: relative;
+        flex: 1;
+        min-width: fit-content;
         background-color: var(--bg-white);
         padding: var(--padding-6);
 
