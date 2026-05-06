@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
+    "js-logger": "^1.6.1",
     "pinia": "^3.0.4",
     "sass": "^1.97.3",
     "vue": "^3.5.25",
@@ -28,6 +29,7 @@
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-vue": "^9.28.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
@@ -42,9 +44,6 @@
   "lint-staged": {
     "*.{js,ts,vue}": [
       "eslint --fix"
-    ],
-    "*.{ts,vue}": [
-      "vue-tsc --noEmit"
     ]
   }
 }

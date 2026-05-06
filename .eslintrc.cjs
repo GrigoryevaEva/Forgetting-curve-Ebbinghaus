@@ -19,6 +19,14 @@ module.exports = {
         extraFileExtensions: [ '.vue' ],
     },
     plugins: [ '@stylistic', '@typescript-eslint' ],
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+    },
     rules: {
         'vue/multi-word-component-names': 'off',
         'linebreak-style': 'off',
