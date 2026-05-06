@@ -1,40 +1,35 @@
 <script setup lang="ts">
-    import { computed, useTemplateRef } from 'vue';
-
-    import { useMouseInElement } from '@vueuse/core';
+    import { computed } from 'vue';
 
     import CustomButton from './CustomButton.vue';
 
-    type Status = 'ok' | 'yellow' | 'red';
+    type Theme = 'main' | 'yellow' | 'red';
     interface Props {
         hover?: boolean;
-        status?: Status;
+        theme?: Theme;
     }
 
     const props = withDefaults(defineProps<Props>(), {
         hover: true,
-        status: 'ok',
+        theme: 'main',
     });
 
-    const isBorder = computed(() => props.status !== 'ok');
-
-    const container = useTemplateRef('container');
-    const { isOutside } = useMouseInElement(container);
+    const isBorder = computed(() => props.theme !== 'main');
 </script>
 
 <template>
     <div
-        ref="container"
         class="root"
         :class="{
-            ['hover']: props.hover,
-            [props.status]: isBorder,
+            ['rootHover']: props.hover,
+            [`${props.theme}Border`]: isBorder,
         }"
     >
-        <slot></slot>
+        <div class="content">
+            <slot></slot>
+        </div>
         <div
             v-if="props.hover"
-            v-show="!isOutside"
             class="buttonsContainer"
         >
             <CustomButton
@@ -56,27 +51,39 @@
         position: relative;
         background-color: var(--bg-white);
         padding: var(--padding-6);
+
+        border-radius: var(--radius-3xl);
+
+        box-shadow: var(--shadow-md);
+
+        .buttonsContainer {
+            display: flex;
+
+            width: fit-content;
+            height: fit-content;
+
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        $colors: yellow, red;
+        @each $color in $colors {
+            .#{$color}Border {
+                border: 1px solid var(--bg-#{$color}-300);
+            }
+        }
     }
-    .hover {
-        transition: all 0.2s;
+    .rootHover {
+        display: flex;
+        .content {
+            flex: 1;
+        }
         &:hover {
             box-shadow: var(--shadow-lg);
         }
-    }
-    .buttonsContainer {
-        position: absolute;
-        right: var(--padding-6);
-        display: flex;
-
-        background-color: var(--bg-white);
-        box-shadow: 0 0 10px 10px var(--bg-white);
-        border-radius: var(--gap-6);
-        width: fit-content;
-    }
-    .yellow {
-        border: 1px solid var(--bg-yellow-300);
-    }
-    .red {
-        border: 1px solid var(--bg-pink-300);
+        &:hover .buttonsContainer {
+            opacity: 1;
+        }
+        transition: all 0.2s;
     }
 </style>

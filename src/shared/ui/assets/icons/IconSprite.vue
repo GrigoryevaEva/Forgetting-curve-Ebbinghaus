@@ -9,7 +9,6 @@
         :stroke-width="strokeWidth"
         stroke-linecap="round"
         stroke-linejoin="round"
-        :class="className"
         v-html="iconPath"
     ></svg>
 </template>
@@ -25,7 +24,6 @@
         height?: string | number;
         color?: string;
         strokeWidth?: string | number;
-        className?: string;
     }
 
     const props = withDefaults(defineProps<Props>(), {
@@ -33,7 +31,6 @@
         height: 24,
         color: 'currentColor',
         strokeWidth: 2,
-        className: '',
     });
 
     const iconPath = computed(() => icons[props.name] || '');
