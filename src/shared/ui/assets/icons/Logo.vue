@@ -5,7 +5,6 @@
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        :class="className"
     >
         <path
             d="M2 17C4 15 6 13 8 13C10 13 11 15 13 15C15 15 16 13 18 13C20 13 22 15 22 15"
@@ -46,7 +45,6 @@
         height?: string | number;
         color?: string;
         strokeWidth?: string | number;
-        className?: string;
     }
 
     const props = withDefaults(defineProps<Props>(), {
@@ -54,6 +52,5 @@
         height: 24,
         color: 'currentColor',
         strokeWidth: 2,
-        className: '',
     });
 </script>

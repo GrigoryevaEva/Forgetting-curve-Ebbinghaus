@@ -19,6 +19,14 @@ module.exports = {
         extraFileExtensions: [ '.vue' ],
     },
     plugins: [ '@stylistic', '@typescript-eslint' ],
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+    },
     rules: {
         'vue/multi-word-component-names': 'off',
         'linebreak-style': 'off',
@@ -29,7 +37,6 @@ module.exports = {
         quotes: [ 'error', 'single', { avoidEscape: true, allowTemplateLiterals: true } ],
         'object-curly-spacing': [ 'error', 'always' ],
         'block-spacing': [ 'error', 'always' ],
-        'array-bracket-spacing': [ 'error', 'always' ],
         'vue/max-attributes-per-line': [
             'error',
             {

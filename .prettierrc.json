@@ -16,6 +16,7 @@
     "^(vue|vue-router|pinia)$",
     "^(axios|@vueuse/.*)$",
     "^@/(app/.*)$",
+    "^@/(stores/.*)$",
     "^@/(pages/.*)$",
     "^@/(widgets/.*)$",
     "^@/(composables/.*)$",

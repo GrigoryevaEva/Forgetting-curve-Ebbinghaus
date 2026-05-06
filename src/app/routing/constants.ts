@@ -22,9 +22,4 @@ export const navItems: TNavItem[] = [
         name: 'Plan',
         path: '/plan',
     },
-    {
-        icon: 'barChart',
-        name: 'Statistics',
-        path: '/statistics',
-    },
 ];
