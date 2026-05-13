@@ -1,4 +1,5 @@
 <script setup lang="ts">
+    import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
     import Logo from '@/shared/ui/assets/icons/Logo.vue';
 
     import { useBreakpoints } from '@/composables';
@@ -15,6 +16,13 @@
             <p>Memento</p>
         </div>
         <Navigation v-if="!isMobileAndTablet" />
+        <div class="user">
+            <p>Barrrister</p>
+            <IconSprite
+                name="logOut"
+                class="userIcon"
+            />
+        </div>
     </header>
 
     <main>
@@ -26,16 +34,15 @@
     </footer>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
     header {
         position: fixed;
         right: 0;
         left: 0;
 
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: var(--gap-2);
+        gap: var(--gap-4);
 
         height: 4rem;
 
@@ -48,6 +55,7 @@
         display: flex;
         gap: var(--gap-3);
         align-items: center;
+        flex: 1;
     }
     .containerLogo p {
         color: var(--bg-purple-900);
@@ -59,6 +67,17 @@
         height: 1.875rem;
         color: var(--bg-purple-400);
     }
+    .user {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-3);
+        color: var(--text-purple-700);
+        &Icon {
+            height: 1rem;
+            width: 1rem;
+        }
+    }
+
     main {
         display: flex;
         flex-direction: column;

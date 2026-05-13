@@ -1,15 +1,18 @@
 <script setup lang="ts">
     import { computed } from 'vue';
+    import { RouterLink } from 'vue-router';
 
     import CustomButton from './CustomButton.vue';
 
     type Theme = 'main' | 'yellow' | 'red';
     interface Props {
+        path?: string;
         hover?: boolean;
         theme?: Theme;
     }
 
     const props = withDefaults(defineProps<Props>(), {
+        path: undefined,
         hover: true,
         theme: 'main',
     });
@@ -21,15 +24,25 @@
     <div
         class="root"
         :class="{
-            ['rootHover']: props.hover,
-            [`${props.theme}Border`]: isBorder,
+            ['rootHover']: hover,
+            [`${theme}Border`]: isBorder,
         }"
     >
-        <div class="content">
+        <RouterLink
+            v-if="path"
+            :to="path"
+            class="content"
+        >
+            <slot></slot>
+        </RouterLink>
+        <div
+            v-else
+            class="content"
+        >
             <slot></slot>
         </div>
         <div
-            v-if="props.hover"
+            v-if="hover"
             class="buttonsContainer"
         >
             <CustomButton

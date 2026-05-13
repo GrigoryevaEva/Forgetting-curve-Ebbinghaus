@@ -13,7 +13,7 @@
         <CardContainer
             v-for="section in sections"
             :key="section.name"
-            class=""
+            :path="`/sections/${section.id}/cards`"
         >
             <div class="section">
                 <div>

@@ -16,4 +16,5 @@ export type TIconName =
     | 'xCircle'
     | 'clock'
     | 'rotate'
-    | 'trendingUp';
+    | 'trendingUp'
+    | 'logOut';
