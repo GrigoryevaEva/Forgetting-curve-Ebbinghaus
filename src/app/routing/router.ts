@@ -3,7 +3,7 @@ import Plan from '@pages/Plan.vue';
 import Repetition from '@pages/Repetition.vue';
 import Sections from '@pages/Sections/Sections.vue';
 
-import { createMemoryHistory, createRouter } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     { path: '/', component: Sections },
@@ -13,7 +13,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes,
 });
 
