@@ -49,11 +49,11 @@
         transition: all 0.2s;
     }
     .item:hover {
-        background-color: var(--bg-purple-50);
+        background-color: var(--bg-purple-200);
         transition: all 0.2s;
     }
     .item.router-link-exact-active {
-        background-color: var(--bg-purple-100);
+        background-color: var(--bg-purple-200);
         transition: all 0.2s;
     }
     .itemMobile {

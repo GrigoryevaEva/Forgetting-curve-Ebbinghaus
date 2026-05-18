@@ -4,6 +4,7 @@ import Logger from 'js-logger';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { IApiError } from '@/api/base';
 import { useRequestState } from '@/composables';
 
 import type { ICreateSectionPayload, ISection, IUpdateSectionPayload } from './types';
@@ -33,7 +34,7 @@ export const useSectionStore = defineStore('sections', () => {
 
     const createSection = async (payload: ICreateSectionPayload) => {
         try {
-            createState.setLoading(true);
+            createState.startRequest();
             // TODO await request
             const response = {
                 id: `${Math.random()}`,
@@ -42,11 +43,11 @@ export const useSectionStore = defineStore('sections', () => {
             sections.value.push(response);
 
             Logger.info(`Section is successfully created: ${response}`);
+            createState.successRequest();
         } catch (e) {
-            createState.setError(true);
-            Logger.error(`Error api request createSection ${e}`);
-        } finally {
-            createState.setLoading(false);
+            const error = e as IApiError;
+            createState.errorRequest();
+            Logger.error(`Error api request createSection ${error.message}`);
         }
     };
 
@@ -61,7 +62,7 @@ export const useSectionStore = defineStore('sections', () => {
         const index = sections.value.indexOf(section);
 
         try {
-            updateState.setLoading(true);
+            updateState.startRequest();
             // TODO await request
             const updatedSection = {
                 ...section,
@@ -69,11 +70,11 @@ export const useSectionStore = defineStore('sections', () => {
             };
             sections.value[index] = updatedSection;
             Logger.info(`Section is successfully updated: ${updatedSection}`);
+            updateState.successRequest();
         } catch (e) {
-            updateState.setError(true);
-            Logger.error(`Error api request updateSection ${e}`);
-        } finally {
-            updateState.setLoading(false);
+            const error = e as IApiError;
+            updateState.errorRequest();
+            Logger.error(`Error api request updateSection ${error.message}`);
         }
     };
 
@@ -87,15 +88,15 @@ export const useSectionStore = defineStore('sections', () => {
         }
         const index = sections.value.indexOf(section);
         try {
-            deleteState.setLoading(true);
+            deleteState.startRequest();
             // TODO await request
             sections.value.splice(index, 1);
             Logger.info(`Section is successfully deleted: ${section}`);
+            deleteState.successRequest();
         } catch (e) {
-            deleteState.setError(true);
-            Logger.error(`Error api request deleteSection ${e}`);
-        } finally {
-            deleteState.setLoading(false);
+            const error = e as IApiError;
+            deleteState.errorRequest();
+            Logger.error(`Error api request deleteSection ${error.message}`);
         }
     };
 

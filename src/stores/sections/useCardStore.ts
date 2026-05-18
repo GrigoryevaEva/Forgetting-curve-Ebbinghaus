@@ -3,6 +3,7 @@ import Logger from 'js-logger';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { IApiError } from '@/api/base';
 import { useRequestState } from '@/composables';
 
 // import { useNow } from '@vueuse/core';
@@ -48,7 +49,7 @@ export const useCardStore = defineStore('cards', () => {
 
     const createCard = async (payload: ICreateCardPayload) => {
         try {
-            createState.setLoading(true);
+            createState.startRequest();
             // TODO await request
             const response = {
                 id: `${Math.random()}`,
@@ -57,11 +58,11 @@ export const useCardStore = defineStore('cards', () => {
             cards.value.push(response);
 
             Logger.info(`Card is successfully created: ${response}`);
+            createState.successRequest();
         } catch (e) {
-            createState.setError(true);
-            Logger.error(`Error api request createCard ${e}`);
-        } finally {
-            createState.setLoading(false);
+            const error = e as IApiError;
+            createState.errorRequest();
+            Logger.error(`Error api request createCard ${error.message}`);
         }
     };
 
@@ -74,7 +75,7 @@ export const useCardStore = defineStore('cards', () => {
         const index = cards.value.indexOf(card);
 
         try {
-            updateState.setLoading(true);
+            updateState.startRequest();
             // TODO await request
             const updatedCard = {
                 ...card,
@@ -82,11 +83,11 @@ export const useCardStore = defineStore('cards', () => {
             };
             cards.value[index] = updatedCard;
             Logger.info(`Cards is successfully updated: ${updatedCard}`);
+            updateState.successRequest();
         } catch (e) {
-            updateState.setError(true);
-            Logger.error(`Error api request updateCard ${e}`);
-        } finally {
-            updateState.setLoading(false);
+            const error = e as IApiError;
+            updateState.errorRequest();
+            Logger.error(`Error api request updateCard ${error.message}`);
         }
     };
 
@@ -98,15 +99,15 @@ export const useCardStore = defineStore('cards', () => {
         }
         const index = cards.value.indexOf(card);
         try {
-            deleteState.setLoading(true);
+            deleteState.startRequest();
             // TODO await request
             cards.value.splice(index, 1);
             Logger.info(`Cards is successfully deleted: ${card}`);
+            deleteState.successRequest();
         } catch (e) {
-            deleteState.setError(true);
-            Logger.error(`Error api request deleteCard ${e}`);
-        } finally {
-            deleteState.setLoading(false);
+            const error = e as IApiError;
+            deleteState.errorRequest();
+            Logger.error(`Error api request deleteCard ${error.message}`);
         }
     };
 

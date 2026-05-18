@@ -23,3 +23,6 @@ export const navItems: TNavItem[] = [
         path: '/plan',
     },
 ];
+
+export const HOME_PATH = '/';
+export const AUTH_PATH = '/login';

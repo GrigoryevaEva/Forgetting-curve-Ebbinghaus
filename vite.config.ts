@@ -17,4 +17,7 @@ export default defineConfig({
         },
     },
     plugins: [ vue() ],
+    server: {
+        allowedHosts: ['frontend.dev.test']
+    }
 });
