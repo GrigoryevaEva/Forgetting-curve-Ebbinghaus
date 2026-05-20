@@ -1,9 +1,7 @@
 import { sections } from '@/constants';
 
-import { normalizeSections } from './normalizer';
-import type { INormalizedData } from './types';
-
-// import { apiClient } from './fetch';
+import { normalizeSections } from './base/normalizer';
+import type { INormalizedData } from './base/types';
 
 export const SectionApi = {
     async getSections(): Promise<INormalizedData> {

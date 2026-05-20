@@ -1,6 +1,5 @@
 :root {
     /* Purple - основная палитра */
-    --bg-purple-50: #faf5ff;
     --bg-purple-100: #f3e8ff;
     --bg-purple-200: #e9d5ff;
     --bg-purple-300: #d8b4fe;
@@ -10,9 +9,11 @@
     --bg-purple-700: #7e22ce;
     --bg-purple-800: #6b21a8;
     --bg-purple-900: #581c87;
-    --text-purple-100: #f3e8ff;
+    --text-purple-100: #dcc6f3;
+    --text-purple-200: #bd8cf2;
     --text-purple-500: #a855f7;
     --text-purple-600: #9333ea;
+    --text-purple-630: #AD46FF;
     --text-purple-650: #9810fa;
     --text-purple-700: #8200db;
     --text-purple-800: #6b21a8;
@@ -95,6 +96,7 @@
     --gap-3: 0.75rem; /* 12px */
     --gap-4: 1rem; /* 16px */
     --gap-6: 1.5rem; /* 24px */
+    --gap-7: 2rem; /* 32px */
     --padding-2: 0.5rem; /* 8px */
     --padding-3: 0.75rem; /* 12px */
     --padding-4: 1rem; /* 16px */

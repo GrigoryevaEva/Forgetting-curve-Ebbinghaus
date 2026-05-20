@@ -1,27 +1,51 @@
 <script setup lang="ts">
-    import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
-    import Logo from '@/shared/ui/assets/icons/Logo.vue';
+    import { ref, watch } from 'vue';
+    import { useRoute } from 'vue-router';
+
+    import { useAuthStore } from '@/stores/auth';
+
+    import CustomButton from '@/shared/ui/components/CustomButton.vue';
+    import LogoContainer from '@/shared/ui/components/LogoContainer.vue';
 
     import { useBreakpoints } from '@/composables';
 
+    import { AUTH_PATH } from './routing/constants';
     import Navigation from './routing/Navigation.vue';
 
     const { isMobileAndTablet } = useBreakpoints();
+
+    const authStore = useAuthStore();
+    const route = useRoute();
+
+    const isLoginPage = ref(false);
+    watch(
+        () => route.fullPath,
+        (newValue) => {
+            if (newValue === AUTH_PATH) {
+                isLoginPage.value = true;
+            } else {
+                isLoginPage.value = false;
+            }
+        }
+    );
 </script>
 
 <template>
-    <header :class="{ headerMobile: isMobileAndTablet }">
-        <div class="containerLogo">
-            <Logo class="logo" />
-            <p>Memento</p>
-        </div>
+    <header
+        v-if="!isLoginPage"
+        :class="{ headerMobile: isMobileAndTablet }"
+    >
+        <LogoContainer />
         <Navigation v-if="!isMobileAndTablet" />
         <div class="user">
-            <p>Barrrister</p>
-            <IconSprite
-                name="logOut"
-                class="userIcon"
-            />
+            <p>{{ authStore.email }}</p>
+            <RouterLink :to="AUTH_PATH">
+                <CustomButton
+                    icon="logout"
+                    theme="transparent"
+                    :when-click="authStore.logout"
+                />
+            </RouterLink>
         </div>
     </header>
 
@@ -29,7 +53,7 @@
         <RouterView />
     </main>
 
-    <footer v-if="isMobileAndTablet">
+    <footer v-if="isMobileAndTablet && !isLoginPage">
         <Navigation />
     </footer>
 </template>
@@ -48,36 +72,6 @@
 
         padding: 0 2rem;
     }
-    .headerMobile {
-        padding: 0 1rem;
-    }
-    .containerLogo {
-        display: flex;
-        gap: var(--gap-3);
-        align-items: center;
-        flex: 1;
-    }
-    .containerLogo p {
-        color: var(--bg-purple-900);
-        font-family: Futurespore;
-        font-size: var(--text-2xl);
-    }
-    .logo {
-        width: 1.875rem;
-        height: 1.875rem;
-        color: var(--bg-purple-400);
-    }
-    .user {
-        display: flex;
-        align-items: center;
-        gap: var(--gap-3);
-        color: var(--text-purple-700);
-        &Icon {
-            height: 1rem;
-            width: 1rem;
-        }
-    }
-
     main {
         display: flex;
         flex-direction: column;
@@ -89,7 +83,7 @@
             -30deg,
             var(--bg-blue-50),
             var(--bg-pink-50),
-            var(--bg-purple-50)
+            var(--bg-purple-100)
         );
 
         padding: 6.5rem 2.5rem 2.5rem 2.5rem;
@@ -110,5 +104,14 @@
     header,
     footer {
         background-color: var(--bg-white);
+    }
+    .headerMobile {
+        padding: 0 1rem;
+    }
+    .user {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-3);
+        color: var(--text-purple-700);
     }
 </style>

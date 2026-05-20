@@ -12,6 +12,12 @@ export interface IApiError {
     code?: string;
 }
 
+export interface IUserFromAPI {
+    id: string;
+    email: string;
+    created_at: number;
+}
+
 export interface ISectionFromAPI {
     id: string;
     name: string;

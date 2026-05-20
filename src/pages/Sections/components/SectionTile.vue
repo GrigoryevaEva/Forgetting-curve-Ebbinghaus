@@ -9,7 +9,7 @@
 </script>
 
 <template>
-    <div class="root">
+    <div class="sectionTile">
         <CardContainer
             v-for="section in sections"
             :key="section.name"
@@ -51,7 +51,7 @@
 </template>
 
 <style scoped lang="scss">
-    .root {
+    .sectionTile {
         display: flex;
         gap: var(--gap-4);
         flex-wrap: wrap;

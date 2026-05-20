@@ -17,4 +17,5 @@ export type TIconName =
     | 'clock'
     | 'rotate'
     | 'trendingUp'
-    | 'logOut';
+    | 'logout'
+    | 'briefcase';

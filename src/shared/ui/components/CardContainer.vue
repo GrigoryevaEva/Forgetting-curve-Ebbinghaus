@@ -22,7 +22,7 @@
 
 <template>
     <div
-        class="root"
+        class="customButton"
         :class="{
             ['rootHover']: hover,
             [`${theme}Border`]: isBorder,
@@ -60,7 +60,7 @@
 </template>
 
 <style scoped lang="scss">
-    .root {
+    .customButton {
         flex: 1;
         min-width: fit-content;
         background-color: var(--bg-white);

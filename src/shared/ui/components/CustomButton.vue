@@ -8,6 +8,8 @@
         text?: string;
         theme?: Themes;
         shadow?: boolean;
+        size?: '100' | '200';
+        whenClick?: () => void;
     }
 
     const props = withDefaults(defineProps<Props>(), {
@@ -15,25 +17,29 @@
         text: undefined,
         theme: 'main',
         shadow: true,
+        size: '100',
+        whenClick: () => {},
     });
 </script>
 
 <template>
-    <div
+    <button
         class="container"
         :class="{
-            [props.theme]: props.theme,
-            ['shadow']: props.shadow,
+            [theme]: theme,
+            ['shadow']: shadow,
+            [`container${size}`]: size,
         }"
+        @click="whenClick"
     >
         <IconSprite
-            v-if="props.icon"
-            :name="props.icon"
+            v-if="icon"
+            :name="icon"
             class="icon"
             width="16"
         />
-        <p v-if="props.text">{{ props.text }}</p>
-    </div>
+        <p v-if="text">{{ text }}</p>
+    </button>
 </template>
 
 <style scoped lang="scss">
@@ -41,16 +47,23 @@
         display: flex;
         gap: var(--gap-2);
         align-items: center;
+        justify-content: center;
 
         width: fit-content;
 
         border-radius: var(--radius-3xl);
 
-        padding: var(--padding-2) var(--padding-3);
-
         cursor: pointer;
 
         transition: all 0.2s;
+
+        &100 {
+            padding: var(--padding-2) var(--padding-3);
+        }
+
+        &200 {
+            padding: var(--padding-4);
+        }
     }
 
     .shadow {
@@ -87,6 +100,16 @@
         .icon,
         p {
             color: var(--text-red-600);
+        }
+    }
+    .transparent {
+        border-radius: var(--radius-full);
+        &:hover {
+            background-color: var(--bg-purple-200);
+        }
+        .icon,
+        p {
+            color: var(--text-purple-700);
         }
     }
 </style>

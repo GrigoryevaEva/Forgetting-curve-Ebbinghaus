@@ -1,42 +1,37 @@
-// stores/app/useAppStore.ts
 import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
 
-import { useCardStore } from '@/stores/sections/useCardStore';
-import { useSectionStore } from '@/stores/sections/useSectionStore';
+import { useCardStore } from '@/stores/sections';
+import { useSectionStore } from '@/stores/sections';
 
-import { SectionApi } from '@/api/section.api';
+import { SectionApi } from '@/api';
+import { IApiError } from '@/api/base';
 import { useRequestState } from '@/composables';
 
 export const useAppStore = defineStore('app', () => {
-    const isInitialized = ref(false);
-
     const initializeState = useRequestState();
 
     const initialize = async () => {
-        if (isInitialized.value || initializeState.isLoading) return;
+        if (initializeState.isSuccess.value || initializeState.isLoading.value) return;
 
         try {
-            initializeState.setLoading(true);
+            initializeState.startRequest();
 
             const { sections, cards } = await SectionApi.getSections();
 
             useSectionStore().setSections(sections);
             useCardStore().setCards(cards);
 
-            isInitialized.value = true;
+            initializeState.successRequest();
         } catch (e) {
-            initializeState.setError(true);
-            Logger.error(`Error api request initialize ${e}`);
-        } finally {
-            initializeState.setLoading(false);
+            const error = e as IApiError;
+            initializeState.errorRequest();
+            Logger.error(`Error api request initialize ${error.message}`);
         }
     };
 
     return {
-        isInitialized,
         initializeState,
         initialize,
     };

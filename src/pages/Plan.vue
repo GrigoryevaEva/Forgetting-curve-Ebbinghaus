@@ -1,10 +1,10 @@
 <script setup lang="ts"></script>
 
 <template>
-    <div class="root">PLAN</div>
+    <div class="planWrapper">PLAN</div>
 </template>
 
 <style scoped lang="scss">
-    .root {
+    .planWrapper {
     }
 </style>

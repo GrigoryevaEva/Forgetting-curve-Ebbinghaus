@@ -35,6 +35,7 @@ async function makeRequest<T>(options: RequestOptions): Promise<T> {
     try {
         const response = await fetch(url, {
             method,
+            credentials: 'include',
             headers: {
                 ...API_CONFIG.DEFAULT_HEADERS,
                 ...headers,
@@ -60,6 +61,10 @@ async function makeRequest<T>(options: RequestOptions): Promise<T> {
             }
 
             throw error;
+        }
+
+        if (response.status === 204) {
+            return null as T;
         }
 
         const data = await response.json();
