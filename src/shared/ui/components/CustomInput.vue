@@ -1,14 +1,16 @@
 <script setup lang="ts">
     interface Props {
         id: string;
-        label: string;
+        label?: string;
         modelValue: string;
         type: string;
         placeholder: string;
         required: boolean;
     }
 
-    const props = withDefaults(defineProps<Props>(), {});
+    const props = withDefaults(defineProps<Props>(), {
+        label: undefined,
+    });
 
     interface Emits {
         (e: 'update:modelValue', value: string): void; // Добавлен emit
@@ -26,7 +28,7 @@
         class="label"
         :for="id"
     >
-        <p>{{ label }}</p>
+        <p v-if="label">{{ label }}</p>
         <input
             :id="id"
             class="input"

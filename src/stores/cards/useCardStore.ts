@@ -1,23 +1,26 @@
 import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+
+import { useNow } from '@vueuse/core';
 
 import { IApiError } from '@/api/base';
+import { CardApi } from '@/api/card.api';
 import { useRequestState } from '@/composables';
 
-// import { useNow } from '@vueuse/core';
-
-import type { ICard, ICreateCardPayload, IUpdateCardPayload } from './types';
+import type { ICard, ICreateCardPayload, IUpdateCardPayload } from '../cards';
 
 export const useCardStore = defineStore('cards', () => {
     const cards = ref<ICard[]>([]);
+    const isEmptyCards = computed(() => cards.value.length === 0);
 
     const createState = useRequestState();
     const updateState = useRequestState();
     const deleteState = useRequestState();
 
-    // const now = useNow();
+    const now = useNow();
+    const tsNowUTC = now.value.getTime();
     // const isWaitCards = computed(() =>
     //     cards.value.some((card) => card.repeatInfo.nextRepeat <= now.value.getTime())
     // );
@@ -31,33 +34,34 @@ export const useCardStore = defineStore('cards', () => {
             Logger.error(`This card (${cardId}) does not exist`);
             return null;
         }
-        Logger.info(`Get card (${cardId}): ${card}`);
+        Logger.info(`Get card (${cardId})`);
         return card;
+    };
+
+    const getCountSectionCards = (sectionId: string) => {
+        return cards.value.reduce((acc, card) => (card.sectionId === sectionId ? acc + 1 : acc), 0);
     };
 
     const getSectionCards = (sectionId: string): ICard[] => {
         const sectionCards = cards.value.filter((card) => card.sectionId === sectionId);
-        Logger.info(`Get section (${sectionId}) cards: ${sectionCards}`);
+        Logger.info(`Get section (${sectionId}) cards`);
         return sectionCards;
     };
 
     const setCards = (newCards: ICard[]) => {
         // the main request is at the app level
         cards.value = newCards;
-        Logger.info(`Cards initialized: ${cards.value}`);
+        Logger.info(`Cards initialized`);
     };
 
     const createCard = async (payload: ICreateCardPayload) => {
         try {
             createState.startRequest();
-            // TODO await request
-            const response = {
-                id: `${Math.random()}`,
-                ...payload,
-            };
+            console.log(payload);
+            const response = await CardApi.createCard(payload);
             cards.value.push(response);
 
-            Logger.info(`Card is successfully created: ${response}`);
+            Logger.info(`Card is successfully created: ${response.id}`);
             createState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -76,13 +80,9 @@ export const useCardStore = defineStore('cards', () => {
 
         try {
             updateState.startRequest();
-            // TODO await request
-            const updatedCard = {
-                ...card,
-                ...payload,
-            };
-            cards.value[index] = updatedCard;
-            Logger.info(`Cards is successfully updated: ${updatedCard}`);
+            const response = await CardApi.updateCard(cardId, payload);
+            cards.value[index] = response;
+            Logger.info(`Cards is successfully updated: ${response.id}`);
             updateState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -100,9 +100,9 @@ export const useCardStore = defineStore('cards', () => {
         const index = cards.value.indexOf(card);
         try {
             deleteState.startRequest();
-            // TODO await request
+            await CardApi.deleteCard(cardId);
             cards.value.splice(index, 1);
-            Logger.info(`Cards is successfully deleted: ${card}`);
+            Logger.info(`Cards is successfully deleted: ${cardId}`);
             deleteState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -128,7 +128,11 @@ export const useCardStore = defineStore('cards', () => {
 
     return {
         // isWaitCards,
+        isEmptyCards,
+        tsNowUTC,
+
         getSectionCards,
+        getCountSectionCards,
 
         setCards,
 

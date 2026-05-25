@@ -2,7 +2,7 @@ import { Ref, ref } from 'vue';
 
 import { onClickOutside, useEventListener } from '@vueuse/core';
 
-export const useModalController = (modalRef: Ref<HTMLElement | null>) => {
+export const useModalController = (modalRef?: Ref<HTMLElement | null>) => {
     const isOpen = ref(false);
 
     const open = () => (isOpen.value = true);

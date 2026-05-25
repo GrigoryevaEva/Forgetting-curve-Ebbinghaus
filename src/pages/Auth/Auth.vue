@@ -21,8 +21,7 @@
 
     const handleSubmit = async () => {
         const data = {
-            email: formData.value.email,
-            password: formData.value.password,
+            ...formData.value,
         };
 
         if (selectTab.value === 'login') {

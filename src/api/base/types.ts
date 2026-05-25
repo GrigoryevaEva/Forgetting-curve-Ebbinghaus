@@ -1,4 +1,5 @@
-import type { ICard, ISection } from '@/stores/sections';
+import { ICard } from '@/stores/cards';
+import type { ISection } from '@/stores/sections';
 
 export interface IApiResponse<T> {
     data: T;
@@ -27,14 +28,37 @@ export interface ISectionFromAPI {
 
 export interface ICardFromAPI {
     id: string;
-    sectionId: string;
+    section_id: string;
     name: string;
     text: string;
     create: number;
-    forgetCount: number;
-    repeatInfo: {
+    forget_count: number;
+    repeat_info: {
         level: number;
-        nextRepeat: number;
+        next_repeat_at: number;
+    };
+}
+
+export interface IUpdateCardPayloadFromAPI {
+    section_id?: string;
+    name?: string;
+    text?: string;
+    forget_count?: number;
+    repeat_info?: {
+        level: number;
+        next_repeat_at: number;
+    };
+}
+
+export interface ICreateCardPayloadFromAPI {
+    section_id: string;
+    name: string;
+    text: string;
+    create: number;
+    forget_count: number;
+    repeat_info: {
+        level: number;
+        next_repeat_at: number;
     };
 }
 

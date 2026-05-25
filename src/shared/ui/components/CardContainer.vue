@@ -1,20 +1,21 @@
 <script setup lang="ts">
     import { computed } from 'vue';
-    import { RouterLink } from 'vue-router';
 
     import CustomButton from './CustomButton.vue';
 
     type Theme = 'main' | 'yellow' | 'red';
     interface Props {
-        path?: string;
         hover?: boolean;
         theme?: Theme;
+        whenEdit?: () => void;
+        whenDelete?: () => void;
     }
 
     const props = withDefaults(defineProps<Props>(), {
-        path: undefined,
         hover: true,
         theme: 'main',
+        whenEdit: undefined,
+        whenDelete: undefined,
     });
 
     const isBorder = computed(() => props.theme !== 'main');
@@ -28,17 +29,7 @@
             [`${theme}Border`]: isBorder,
         }"
     >
-        <RouterLink
-            v-if="path"
-            :to="path"
-            class="content"
-        >
-            <slot></slot>
-        </RouterLink>
-        <div
-            v-else
-            class="content"
-        >
+        <div class="content">
             <slot></slot>
         </div>
         <div
@@ -49,11 +40,13 @@
                 theme="blue"
                 icon="edit"
                 :shadow="false"
+                :when-click="whenEdit"
             />
             <CustomButton
                 theme="red"
                 icon="trash"
                 :shadow="false"
+                :when-click="whenDelete"
             />
         </div>
     </div>

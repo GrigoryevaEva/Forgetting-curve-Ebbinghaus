@@ -30,7 +30,7 @@
             ['shadow']: shadow,
             [`container${size}`]: size,
         }"
-        @click="whenClick"
+        @click.stop="whenClick"
     >
         <IconSprite
             v-if="icon"
@@ -53,6 +53,8 @@
 
         border-radius: var(--radius-3xl);
 
+        font-size: var(--text-base);
+
         cursor: pointer;
 
         transition: all 0.2s;
@@ -63,6 +65,11 @@
 
         &200 {
             padding: var(--padding-4);
+
+            .icon {
+                height: 2rem;
+                width: 2rem;
+            }
         }
     }
 

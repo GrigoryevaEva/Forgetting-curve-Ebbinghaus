@@ -8,15 +8,49 @@ import Logger from 'js-logger';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
+import { useSectionStore } from '@/stores/sections';
 
 import { IApiError } from '@/api/base';
 
 const routes = [
-    { path: '/', component: Sections, meta: { requiresAuth: true } },
-    { path: '/login', component: Auth, meta: { requiresAuth: false, isPublic: true } },
-    { path: '/sections/:id/cards', component: Cards, meta: { requiresAuth: true } },
-    { path: '/repetition', component: Repetition, meta: { requiresAuth: true } },
-    { path: '/plan', component: Plan, meta: { requiresAuth: true } },
+    {
+        path: '/',
+        component: Sections,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/login',
+        component: Auth,
+        meta: { requiresAuth: false, isPublic: true },
+    },
+    {
+        path: '/sections/:id/cards',
+        component: Cards,
+        meta: { requiresAuth: true },
+        beforeEnter: async (to, from, next) => {
+            const sectionId = to.params.id;
+            const store = useSectionStore();
+
+            if (!store.hasSection(sectionId)) {
+                next({
+                    path: '/',
+                    query: { error: 'section_not_found' },
+                });
+                return;
+            }
+            next();
+        },
+    },
+    {
+        path: '/repetition',
+        component: Repetition,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/plan',
+        component: Plan,
+        meta: { requiresAuth: true },
+    },
 ];
 
 const router = createRouter({

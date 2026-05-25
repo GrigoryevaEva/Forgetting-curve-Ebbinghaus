@@ -1,25 +1,43 @@
 <script setup lang="ts">
+    import { useRouter } from 'vue-router';
+
+    import { useCardStore } from '@/stores/cards';
+    import { useSectionStore } from '@/stores/sections';
+
     import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
     import CardContainer from '@/shared/ui/components/CardContainer.vue';
 
-    import { sections } from '@/constants';
+    const sectionStore = useSectionStore();
+    const cardStore = useCardStore();
 
     const testNew = true;
     const testOverdue = true;
+
+    const router = useRouter();
+
+    const handleTransferToCards = (sectionId: string) => {
+        router.push(`/sections/${sectionId}/cards`);
+    };
 </script>
 
 <template>
     <div class="sectionTile">
         <CardContainer
-            v-for="section in sections"
-            :key="section.name"
-            :path="`/sections/${section.id}/cards`"
+            v-for="section in sectionStore.sections"
+            :key="section.id"
+            :when-edit="() => {}"
+            :when-delete="
+                () => {
+                    sectionStore.deleteSection(section.id);
+                }
+            "
+            @click="handleTransferToCards(section.id)"
         >
             <div class="section">
                 <div>
                     <div
                         class="iconContainer"
-                        :class="`${section.color}BcgColor`"
+                        :class="`greenBcgColor`"
                     >
                         <IconSprite
                             name="folderOpen"
@@ -31,18 +49,18 @@
                     <h3>
                         {{ section.name }}
                     </h3>
-                    <p class="count">{{ section.cards.length }} карточки</p>
+                    <p class="count">Карточек: {{ cardStore.getCountSectionCards(section.id) }}</p>
                     <p
                         v-if="testNew"
                         class="new"
                     >
-                        Новые: 1
+                        Новые: {{}}
                     </p>
                     <p
                         v-if="testOverdue"
                         class="overdue"
                     >
-                        Просрочено: 1
+                        Просрочено: {{}}
                     </p>
                 </div>
             </div>

@@ -1,12 +1,23 @@
 <script setup lang="ts">
+    import { useRouter } from 'vue-router';
+
+    import { REPETITION_PATH } from '@/app/routing/constants';
+
     import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
+
+    const router = useRouter();
+
+    const handleTransferToRepetition = () => router.push(REPETITION_PATH);
 </script>
 
 <template>
-    <div class="container">
+    <div
+        class="container"
+        @click="handleTransferToRepetition"
+    >
         <div class="containerInfo">
             <h3>Время повторить!</h3>
-            <p>{} карточка ждут вас</p>
+            <p>Карточек: {{}}</p>
         </div>
         <IconSprite
             name="clock"

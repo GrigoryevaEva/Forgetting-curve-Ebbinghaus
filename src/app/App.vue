@@ -1,7 +1,8 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
+    import { onMounted, ref, watch } from 'vue';
     import { useRoute } from 'vue-router';
 
+    import { useAppStore } from '@/stores/app';
     import { useAuthStore } from '@/stores/auth';
 
     import CustomButton from '@/shared/ui/components/CustomButton.vue';
@@ -15,6 +16,7 @@
     const { isMobileAndTablet } = useBreakpoints();
 
     const authStore = useAuthStore();
+    const appStore = useAppStore();
     const route = useRoute();
 
     const isLoginPage = ref(false);
@@ -28,6 +30,9 @@
             }
         }
     );
+    onMounted(() => {
+        appStore.initialize();
+    });
 </script>
 
 <template>

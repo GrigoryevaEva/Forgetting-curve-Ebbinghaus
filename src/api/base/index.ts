@@ -1,6 +1,6 @@
 export { API_CONFIG } from './config';
 
-export { normalizeSections } from './normalizer';
+export { useNormalizeData } from './useNormalizeData';
 
 export { apiClient } from './fetch';
 

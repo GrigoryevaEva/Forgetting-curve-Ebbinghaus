@@ -30,5 +30,5 @@
       "@shared/*": ["./src/shared/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/shared/translations"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/shared/translations", "src/app/routing/router.ts"]
 }

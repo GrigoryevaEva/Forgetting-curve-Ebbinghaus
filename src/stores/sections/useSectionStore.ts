@@ -1,16 +1,18 @@
-// stores/sections/useDeckStore.ts
 import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
+import { SectionApi } from '@/api';
 import { IApiError } from '@/api/base';
 import { useRequestState } from '@/composables';
 
+import { useCardStore } from '../cards';
 import type { ICreateSectionPayload, ISection, IUpdateSectionPayload } from './types';
 
 export const useSectionStore = defineStore('sections', () => {
     const sections = ref<ISection[]>([]);
+    const isEmptySections = computed(() => sections.value.length === 0);
 
     const createState = useRequestState();
     const updateState = useRequestState();
@@ -22,27 +24,33 @@ export const useSectionStore = defineStore('sections', () => {
             Logger.error(`This section (${sectionId}) does not exist`);
             return null;
         }
-        Logger.info(`Get card (${sectionId}): ${section}`);
+        Logger.info(`Get card (${sectionId})`);
         return section;
     };
 
     const setSections = async (newSections: ISection[]) => {
         // the main request is at the app level
         sections.value = newSections;
-        Logger.info(`Sections initialized: ${sections.value}`);
+        Logger.info(`Sections initialized`);
+    };
+
+    const hasSection = (sectionId: string) => {
+        const result = sections.value.some((section) => section.id === sectionId);
+        if (result) {
+            Logger.info(`Section ${sectionId} found`);
+        } else {
+            Logger.error(`Section ${sectionId} not found`);
+        }
+        return result;
     };
 
     const createSection = async (payload: ICreateSectionPayload) => {
         try {
             createState.startRequest();
-            // TODO await request
-            const response = {
-                id: `${Math.random()}`,
-                ...payload,
-            };
+            const response = await SectionApi.createSection(payload);
             sections.value.push(response);
 
-            Logger.info(`Section is successfully created: ${response}`);
+            Logger.info(`Section is successfully created: ${response.id}`);
             createState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -63,13 +71,9 @@ export const useSectionStore = defineStore('sections', () => {
 
         try {
             updateState.startRequest();
-            // TODO await request
-            const updatedSection = {
-                ...section,
-                ...payload,
-            };
-            sections.value[index] = updatedSection;
-            Logger.info(`Section is successfully updated: ${updatedSection}`);
+            const response = await SectionApi.updateSection(sectionId, payload);
+            sections.value[index] = response;
+            Logger.info(`Section is successfully updated: ${response.id}`);
             updateState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -89,9 +93,11 @@ export const useSectionStore = defineStore('sections', () => {
         const index = sections.value.indexOf(section);
         try {
             deleteState.startRequest();
-            // TODO await request
+            await SectionApi.deleteSection(sectionId);
             sections.value.splice(index, 1);
-            Logger.info(`Section is successfully deleted: ${section}`);
+            const cardStore = useCardStore();
+            cardStore.deleteSectionCards(sectionId);
+            Logger.info(`Section is successfully deleted: ${sectionId}`);
             deleteState.successRequest();
         } catch (e) {
             const error = e as IApiError;
@@ -101,7 +107,13 @@ export const useSectionStore = defineStore('sections', () => {
     };
 
     return {
+        sections,
+        isEmptySections,
+
+        getSection,
+
         setSections,
+        hasSection,
 
         createSection,
         createState,

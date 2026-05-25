@@ -2,7 +2,7 @@ import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
 
-import { useCardStore } from '@/stores/sections';
+import { useCardStore } from '@/stores/cards';
 import { useSectionStore } from '@/stores/sections';
 
 import { SectionApi } from '@/api';
