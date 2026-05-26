@@ -1,15 +1,22 @@
 import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ComputedRef, ref, toRaw } from 'vue';
 
-import { useNow } from '@vueuse/core';
+import { useDateFormat, useNow, useTimeAgoIntl } from '@vueuse/core';
 
 import { IApiError } from '@/api/base';
 import { CardApi } from '@/api/card.api';
-import { useRequestState } from '@/composables';
+import { useDateFormatter, useRequestState } from '@/composables';
 
-import type { ICard, ICreateCardPayload, IUpdateCardPayload } from '../cards';
+import {
+    cardLevelsTSMap,
+    type ICard,
+    type ICreateCardPayload,
+    type IUpdateCardPayload,
+    LAST_LEVEL,
+    TCardLevels,
+} from '../cards';
 
 export const useCardStore = defineStore('cards', () => {
     const cards = ref<ICard[]>([]);
@@ -20,16 +27,12 @@ export const useCardStore = defineStore('cards', () => {
     const deleteState = useRequestState();
 
     const now = useNow();
-    const tsNowUTC = now.value.getTime();
-    // const isWaitCards = computed(() =>
-    //     cards.value.some((card) => card.repeatInfo.nextRepeat <= now.value.getTime())
-    // );
+    const tsNowUTC = computed(() => now.value.getTime());
 
-    // TODO звуковое сопровождение при наступлении момента повторения
-    // TODO использовать ли useTimeAgo (?)
+    const { getDateOnly, getTimeWithDate } = useDateFormatter();
 
     const getCard = (cardId: string): ICard | null => {
-        const card = cards.value.find((card) => card.id === cardId);
+        const card = toRaw(cards.value.find((card) => card.id === cardId));
         if (!card) {
             Logger.error(`This card (${cardId}) does not exist`);
             return null;
@@ -38,14 +41,70 @@ export const useCardStore = defineStore('cards', () => {
         return card;
     };
 
-    const getCountSectionCards = (sectionId: string) => {
-        return cards.value.reduce((acc, card) => (card.sectionId === sectionId ? acc + 1 : acc), 0);
-    };
-
     const getSectionCards = (sectionId: string): ICard[] => {
         const sectionCards = cards.value.filter((card) => card.sectionId === sectionId);
         Logger.info(`Get section (${sectionId}) cards`);
         return sectionCards;
+    };
+
+    const getCountSectionCards = (sectionId: string) => {
+        return cards.value.reduce((acc, card) => (card.sectionId === sectionId ? acc + 1 : acc), 0);
+    };
+
+    const getCountNewSectionCards = (sectionId: string) => {
+        return cards.value.reduce((acc, card) => {
+            if (card.sectionId === sectionId) {
+                return card.repeatInfo.level === 0 ? acc + 1 : acc;
+            }
+            return acc;
+        }, 0);
+    };
+
+    const getCountOverdueSectionCards = (sectionId: string) => {
+        return cards.value.reduce((acc, card) => {
+            if (card.sectionId === sectionId) {
+                return getStatusCard(card) === 'overdue' ? acc + 1 : acc;
+            }
+            return acc;
+        }, 0);
+    };
+
+    const getDateRepeatCard = (card: ICard) => {
+        if (card.repeatInfo.level < 4) {
+            getTimeWithDate(card.repeatInfo.nextRepeat);
+        } else {
+            getDateOnly(card.repeatInfo.nextRepeat);
+        }
+    };
+
+    const getDateCreateCard = (card: ICard) => {
+        return getDateOnly(card.create);
+    };
+
+    const getLevelPercentCard = (card: ICard) => {
+        return cardLevelsTSMap[card.repeatInfo.level].percent;
+    };
+
+    const getStatusCard = (card: ICard): 'ready' | 'overdue' | ComputedRef<string> => {
+        const nextRepeat = card.repeatInfo.nextRepeat;
+        const level = card.repeatInfo.level;
+
+        if (level === 0) return 'ready';
+
+        if (level < 4) {
+            return nextRepeat < tsNowUTC.value
+                ? 'overdue'
+                : useTimeAgoIntl(nextRepeat, { locale: 'ru' });
+        }
+
+        const isToday =
+            useDateFormat(nextRepeat, 'YYYY-MM-DD').value ===
+            useDateFormat(now, 'YYYY-MM-DD').value;
+        if (isToday) return 'ready';
+
+        return nextRepeat < tsNowUTC.value
+            ? 'overdue'
+            : useTimeAgoIntl(nextRepeat, { locale: 'ru' });
     };
 
     const setCards = (newCards: ICard[]) => {
@@ -54,10 +113,36 @@ export const useCardStore = defineStore('cards', () => {
         Logger.info(`Cards initialized`);
     };
 
+    const forgetCard = (card: ICard) => {
+        const returnLevel = cardLevelsTSMap[card.repeatInfo.level].returnLevel;
+
+        const payload = {
+            repeatInfo: {
+                level: returnLevel,
+                nextRepeat: cardLevelsTSMap[returnLevel].ts + tsNowUTC.value,
+            },
+        };
+        updateCard(card.id, payload);
+    };
+
+    const rememberCard = (card: ICard) => {
+        // TODO
+        if (card.repeatInfo.level + 1 === LAST_LEVEL) return;
+
+        const nextLevel = (card.repeatInfo.level + 1) as TCardLevels;
+
+        const payload = {
+            repeatInfo: {
+                level: nextLevel,
+                nextRepeat: cardLevelsTSMap[nextLevel].ts + tsNowUTC.value,
+            },
+        };
+        updateCard(card.id, payload);
+    };
+
     const createCard = async (payload: ICreateCardPayload) => {
         try {
             createState.startRequest();
-            console.log(payload);
             const response = await CardApi.createCard(payload);
             cards.value.push(response);
 
@@ -120,21 +205,23 @@ export const useCardStore = defineStore('cards', () => {
         Logger.info(`All section (${sectionId}) cards is deleted`);
     };
 
-    // TODO actions
-    // update - помню карту
-    // update - не помню карту
-    // update - сменить секцию карты
-    // get - все карты не 0 уровня (для плана повторений)
-
     return {
-        // isWaitCards,
         isEmptyCards,
         tsNowUTC,
 
         getSectionCards,
         getCountSectionCards,
+        getCountNewSectionCards,
+        getCountOverdueSectionCards,
+        getDateCreateCard,
+        getDateRepeatCard,
+        getLevelPercentCard,
+        getStatusCard,
 
         setCards,
+
+        forgetCard,
+        rememberCard,
 
         createCard,
         createState,

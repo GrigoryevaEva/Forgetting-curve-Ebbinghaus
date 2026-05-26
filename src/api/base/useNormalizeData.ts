@@ -39,7 +39,7 @@ export const useNormalizeData = () => {
             sectionId: rawCard.section_id,
             name: rawCard.name,
             text: rawCard.text,
-            create: rawCard.create,
+            create: rawCard.created_at * 1000,
             forgetCount: rawCard.forget_count,
             repeatInfo: {
                 level: rawCard.repeat_info.level,
@@ -58,7 +58,6 @@ export const useNormalizeData = () => {
                 section_id: card.sectionId,
                 name: card.name,
                 text: card.text,
-                create: card.create,
                 forget_count: card.forgetCount,
                 repeat_info: {
                     level: card.repeatInfo.level,

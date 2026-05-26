@@ -20,7 +20,6 @@
         sectionId: props.sectionId,
         name: '',
         text: '',
-        create: 0,
         forgetCount: 0,
         repeatInfo: {
             level: 0,
@@ -41,7 +40,6 @@
     const handleSubmit = async () => {
         const data = {
             ...toRaw(formData.value),
-            create: cardStore.tsNowUTC,
         };
         await cardStore.createCard(data);
         if (cardStore.createState.isSuccess) handleClose();

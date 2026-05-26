@@ -31,7 +31,7 @@ export interface ICardFromAPI {
     section_id: string;
     name: string;
     text: string;
-    create: number;
+    created_at: number;
     forget_count: number;
     repeat_info: {
         level: number;
@@ -54,7 +54,6 @@ export interface ICreateCardPayloadFromAPI {
     section_id: string;
     name: string;
     text: string;
-    create: number;
     forget_count: number;
     repeat_info: {
         level: number;

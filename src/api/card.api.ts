@@ -5,7 +5,6 @@ import { useNormalizeData } from './base';
 
 export const CardApi = {
     async createCard(rawPayload: ICreateCardPayload): Promise<ICard> {
-        console.log(rawPayload);
         const curPayload = useNormalizeData().denormalizeCard('POST', rawPayload);
         const response = await apiClient.post<ICardFromAPI>('/api/card', curPayload);
         return useNormalizeData().normalizeCard(response);

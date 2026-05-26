@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
 
-    import { useCardStore } from '@/stores/cards';
+    import { ICard, useCardStore } from '@/stores/cards';
 
     import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
     import CardContainer from '@/shared/ui/components/CardContainer.vue';
@@ -14,6 +14,13 @@
     const sectionId = route.params['id'] as string;
 
     const { isOpen: isExpandedText, toggle } = useModalController();
+
+    const getTextStatusCard = (card: ICard) => {
+        const status = cardStore.getStatusCard(card);
+        if (status === 'ready') return 'Готова к повторению';
+        if (status === 'overdue') return 'Просрочено';
+        return status.value;
+    };
 </script>
 
 <template>
@@ -30,7 +37,9 @@
         >
             <div>
                 <div>
-                    <p>Статус карточки</p>
+                    <p>
+                        {{ getTextStatusCard(card) }}
+                    </p>
                     <p>{{ card.name }}</p>
                 </div>
                 <div class="textContainer">
@@ -41,15 +50,19 @@
                     <p :class="{ collapsed: !isExpandedText }">{{ card.text }}</p>
                 </div>
                 <div>
-                    <p>%</p>
-                    <p>Уровень</p>
+                    <p>{{ cardStore.getLevelPercentCard(card) }}%</p>
+                    <p>
+                        {{
+                            card.repeatInfo.level === 0
+                                ? 'Новая'
+                                : `Этап ${card.repeatInfo.level}. Повторение ${cardStore.getDateRepeatCard(card)}`
+                        }}
+                    </p>
                 </div>
                 <div>
-                    <p>Создана: {{ card.create }}</p>
+                    <p>Создана: {{ cardStore.getDateCreateCard(card) }}</p>
                     <div>•</div>
-                    <p>Забыта:</p>
-                    <div>•</div>
-                    <p>Повторений:</p>
+                    <p>Забыта: {{ card.forgetCount }} раз</p>
                 </div>
             </div>
         </CardContainer>

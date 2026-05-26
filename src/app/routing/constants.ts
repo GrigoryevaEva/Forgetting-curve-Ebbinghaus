@@ -14,17 +14,17 @@ type TNavItem = {
 export const navItems: TNavItem[] = [
     {
         icon: 'home',
-        name: 'Sections',
+        name: 'Разделы',
         path: HOME_PATH,
     },
     {
         icon: 'bookOpen',
-        name: 'Repetition',
+        name: 'Повторение',
         path: REPETITION_PATH,
     },
     {
         icon: 'calendar',
-        name: 'Plan',
+        name: 'План',
         path: PLAN_PATH,
     },
 ];

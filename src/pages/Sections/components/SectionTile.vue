@@ -10,9 +10,6 @@
     const sectionStore = useSectionStore();
     const cardStore = useCardStore();
 
-    const testNew = true;
-    const testOverdue = true;
-
     const router = useRouter();
 
     const handleTransferToCards = (sectionId: string) => {
@@ -51,16 +48,16 @@
                     </h3>
                     <p class="count">Карточек: {{ cardStore.getCountSectionCards(section.id) }}</p>
                     <p
-                        v-if="testNew"
+                        v-if="cardStore.getCountNewSectionCards(section.id)"
                         class="new"
                     >
-                        Новые: {{}}
+                        Новые: {{ cardStore.getCountNewSectionCards(section.id) }}
                     </p>
                     <p
-                        v-if="testOverdue"
+                        v-if="cardStore.getCountOverdueSectionCards(section.id)"
                         class="overdue"
                     >
-                        Просрочено: {{}}
+                        Просрочено: {{ cardStore.getCountOverdueSectionCards(section.id) }}
                     </p>
                 </div>
             </div>

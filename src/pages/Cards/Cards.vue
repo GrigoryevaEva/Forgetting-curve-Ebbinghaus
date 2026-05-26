@@ -39,7 +39,7 @@
             </div>
             <CustomButton
                 icon="plus"
-                text="Новый раздел"
+                text="Новая карточка"
                 :when-click="toggle"
             />
         </div>
