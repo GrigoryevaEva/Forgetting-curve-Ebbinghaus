@@ -3,8 +3,12 @@
 
     import { REPETITION_PATH } from '@/app/routing/constants';
 
-    import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
+    import { useCardStore } from '@/stores/cards';
 
+    import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
+    import CustomText from '@/shared/ui/components/CustomText.vue';
+
+    const cardStore = useCardStore();
     const router = useRouter();
 
     const handleTransferToRepetition = () => router.push(REPETITION_PATH);
@@ -16,8 +20,15 @@
         @click="handleTransferToRepetition"
     >
         <div class="containerInfo">
-            <h3>Время повторить!</h3>
-            <p>Карточек: {{}}</p>
+            <CustomText
+                class="textHeader"
+                text="Время повторить!"
+                size="xl"
+            />
+            <CustomText
+                class="count"
+                :text="`Карточек: ${cardStore.getRepetitionCards().length}`"
+            />
         </div>
         <IconSprite
             name="clock"
@@ -32,14 +43,36 @@
         align-items: center;
         justify-content: space-between;
 
-        background-image: linear-gradient(0.25turn, var(--bg-purple-400), var(--bg-pink-500));
+        background-image: linear-gradient(
+            0.25turn,
+            var(--bg-purple-400),
+            var(--bg-pink-500),
+            var(--bg-purple-400)
+        );
+
+        background-size: 200% 100%;
+        background-position: 0% 0%;
+
+        &:hover {
+            transform: translateY(-2px);
+            animation: spinGradient 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spinGradient {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 200% 0%;
+            }
+        }
 
         border-radius: var(--radius-3xl);
 
         padding: var(--padding-6);
 
         box-shadow: var(--shadow-md);
-        transition: box-shadow 0.2s;
+        transition: all 0.2s;
 
         cursor: pointer;
 
@@ -52,19 +85,19 @@
             display: flex;
             flex-direction: column;
             gap: var(--gap-2);
+
+            .textHeader {
+                color: var(--text-white);
+            }
+            .count {
+                color: var(--text-purple-100);
+            }
         }
         .icon {
             height: 3rem;
             width: 3rem;
 
-            color: var(--bg-purple-100);
-        }
-        h3 {
-            font-size: var(--text-xl);
             color: var(--text-white);
-        }
-        p {
-            color: var(--text-purple-100);
         }
     }
 </style>

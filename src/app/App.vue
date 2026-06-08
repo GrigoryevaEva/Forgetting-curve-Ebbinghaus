@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { onMounted, ref, watch } from 'vue';
+    import { ref, watch } from 'vue';
     import { useRoute } from 'vue-router';
 
     import { useAppStore } from '@/stores/app';
     import { useAuthStore } from '@/stores/auth';
 
     import CustomButton from '@/shared/ui/components/CustomButton.vue';
+    import CustomText from '@/shared/ui/components/CustomText.vue';
     import LogoContainer from '@/shared/ui/components/LogoContainer.vue';
 
     import { useBreakpoints } from '@/composables';
@@ -30,9 +31,14 @@
             }
         }
     );
-    onMounted(() => {
-        appStore.initialize();
-    });
+    watch(
+        () => authStore.isAuth,
+        (newValue) => {
+            if (newValue) {
+                appStore.initialize();
+            }
+        }
+    );
 </script>
 
 <template>
@@ -43,11 +49,16 @@
         <LogoContainer />
         <Navigation v-if="!isMobileAndTablet" />
         <div class="user">
-            <p>{{ authStore.email }}</p>
+            <CustomText
+                v-if="authStore.email"
+                class="userName"
+                :text="authStore.email"
+            />
             <RouterLink :to="AUTH_PATH">
                 <CustomButton
                     icon="logout"
                     theme="transparent"
+                    :shadow="false"
                     :when-click="authStore.logout"
                 />
             </RouterLink>
@@ -74,14 +85,19 @@
         gap: var(--gap-4);
 
         height: 4rem;
+        max-width: 100vw;
+        overflow: hidden;
 
         padding: 0 2rem;
+
+        z-index: 100;
     }
     main {
         display: flex;
         flex-direction: column;
         gap: var(--gap-6);
         width: 100vw;
+        min-height: max-content;
         height: 100vh;
 
         background-image: linear-gradient(
@@ -91,7 +107,7 @@
             var(--bg-purple-100)
         );
 
-        padding: 6.5rem 2.5rem 2.5rem 2.5rem;
+        padding: 6.5rem 2.5rem;
     }
     footer {
         position: fixed;
@@ -117,6 +133,16 @@
         display: flex;
         align-items: center;
         gap: var(--gap-3);
+
+        min-width: 0;
+
         color: var(--text-purple-700);
+
+        &Name {
+            color: var(--text-purple-700);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 </style>

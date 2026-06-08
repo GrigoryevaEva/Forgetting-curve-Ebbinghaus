@@ -24,7 +24,7 @@ export const useSectionStore = defineStore('sections', () => {
             Logger.error(`This section (${sectionId}) does not exist`);
             return null;
         }
-        Logger.info(`Get card (${sectionId})`);
+        Logger.info(`Get section (${sectionId})`);
         return section;
     };
 

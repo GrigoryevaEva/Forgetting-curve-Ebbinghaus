@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import IconSprite from '../assets/icons/IconSprite.vue';
     import type { TIconName } from '../assets/icons/types';
+    import CustomText from './CustomText.vue';
 
     type Themes = 'main' | 'secondary' | 'transparent' | 'blue' | 'red' | 'green';
     interface Props {
@@ -38,7 +39,11 @@
             class="icon"
             width="16"
         />
-        <p v-if="text">{{ text }}</p>
+        <CustomText
+            v-if="text"
+            :text="text"
+            class="text"
+        />
     </button>
 </template>
 
@@ -61,6 +66,10 @@
 
         &100 {
             padding: var(--padding-2) var(--padding-3);
+
+            .icon {
+                width: 1.2rem;
+            }
         }
 
         &200 {
@@ -83,39 +92,40 @@
             background-color: var(--bg-purple-500);
         }
         .icon,
-        p {
+        .text {
             color: var(--text-white);
         }
     }
     .blue {
         background-color: var(--bg-blue-100);
-        border-radius: 100%;
+        border-radius: var(--radius-full);
         &:hover {
             background-color: var(--bg-blue-200);
         }
         .icon,
-        p {
+        .text {
             color: var(--text-blue-600);
         }
     }
     .red {
         background-color: var(--bg-red-100);
-        border-radius: 100%;
+        border-radius: var(--radius-full);
         &:hover {
             background-color: var(--bg-red-200);
         }
         .icon,
-        p {
+        .text {
             color: var(--text-red-600);
         }
     }
     .transparent {
         border-radius: var(--radius-full);
+        background-color: transparent;
         &:hover {
-            background-color: var(--bg-purple-200);
+            background-color: var(--bg-purple-50);
         }
         .icon,
-        p {
+        .text {
             color: var(--text-purple-700);
         }
     }

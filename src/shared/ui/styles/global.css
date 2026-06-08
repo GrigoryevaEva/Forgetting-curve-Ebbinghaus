@@ -1,5 +1,6 @@
 :root {
     /* Purple - основная палитра */
+    --bg-purple-50: #faf5ff;
     --bg-purple-100: #f3e8ff;
     --bg-purple-200: #e9d5ff;
     --bg-purple-300: #d8b4fe;
@@ -13,7 +14,7 @@
     --text-purple-200: #bd8cf2;
     --text-purple-500: #a855f7;
     --text-purple-600: #9333ea;
-    --text-purple-630: #AD46FF;
+    --text-purple-630: #ad46ff;
     --text-purple-650: #9810fa;
     --text-purple-700: #8200db;
     --text-purple-800: #6b21a8;
@@ -55,6 +56,9 @@
     --text-green-700: #15803d;
     --text-green-800: #166534;
 
+    --bg-lazure-100: #00D492;
+    --bg-lazure-200: #00D5BE;
+
     /* Red - ошибки, "Не помню", удаление */
     --bg-red-100: #fee2e2;
     --bg-red-200: #fecaca;
@@ -82,6 +86,7 @@
     --border-purple-100: #f3e8ff;
     --border-purple-200: #e9d5ff;
     --border-purple-400: #c084fc;
+    --border-pink-300: #fda5d5;
     --border-gray-200: #e5e7eb;
 
     /* Border radius */
@@ -92,15 +97,21 @@
     --radius-full: 9999px; /* кнопки */
 
     /* Spacing */
+    --gap-1: 0.25rem; /* 8px */
     --gap-2: 0.5rem; /* 8px */
     --gap-3: 0.75rem; /* 12px */
     --gap-4: 1rem; /* 16px */
+    --gap-5: 1.25rem;
     --gap-6: 1.5rem; /* 24px */
     --gap-7: 2rem; /* 32px */
+    --gap-8: 3rem;
     --padding-2: 0.5rem; /* 8px */
     --padding-3: 0.75rem; /* 12px */
     --padding-4: 1rem; /* 16px */
+    --padding-5: 1.25rem;
     --padding-6: 1.5rem; /* 24px */
+    --padding-7: 2rem; /* 32px */
+    --padding-8: 3rem;
 
     /* Typography */
     --text-xs: 0.75rem; /* 12px */
@@ -127,7 +138,14 @@
         local('Expressway'),
         local('Expressway'),
         url('../assets/fonts/Expressway.ttf') format('opentype');
-    font-weight: normal;
+}
+
+@font-face {
+    font-family: Zerno;
+    src:
+        local('Zerno-ExtraLight'),
+        local('Zerno-ExtraLight'),
+        url('../assets/fonts/Zerno-ExtraLight.otf') format('opentype');
 }
 
 @font-face {
@@ -136,7 +154,6 @@
         local('Futurespore-cyrillic'),
         local('Futurespore-cyrillic'),
         url('../assets/fonts/Futurespore-cyrillic.otf') format('opentype');
-    font-weight: normal;
 }
 
 body {

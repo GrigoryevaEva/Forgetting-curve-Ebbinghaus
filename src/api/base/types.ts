@@ -19,6 +19,20 @@ export interface IUserFromAPI {
     created_at: number;
 }
 
+export interface IDemoUserFromAPI {
+    user: {
+        id: string;
+        email: string;
+        created_at: number;
+    };
+    email: string;
+    password: string;
+    seeded: {
+        sections: number;
+        cards: number;
+    };
+}
+
 export interface ISectionFromAPI {
     id: string;
     name: string;

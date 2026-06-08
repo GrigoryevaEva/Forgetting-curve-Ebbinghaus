@@ -1,11 +1,14 @@
 <script setup lang="ts">
+    import CustomText from './CustomText.vue';
+
     interface Props {
         id: string;
-        label?: string;
         modelValue: string;
         type: string;
         placeholder: string;
         required: boolean;
+        label?: string;
+        isTextarea?: boolean;
     }
 
     const props = withDefaults(defineProps<Props>(), {
@@ -13,7 +16,7 @@
     });
 
     interface Emits {
-        (e: 'update:modelValue', value: string): void; // Добавлен emit
+        (e: 'update:modelValue', value: string): void;
     }
     const emit = defineEmits<Emits>();
 
@@ -28,14 +31,30 @@
         class="label"
         :for="id"
     >
-        <p v-if="label">{{ label }}</p>
+        <CustomText
+            v-if="label"
+            class="text"
+            :text="label"
+            size="sm"
+        />
+        <textarea
+            v-if="isTextarea"
+            :id="id"
+            class="input textarea"
+            rows="10"
+            :placeholder="placeholder"
+            :value="modelValue"
+            :required="required"
+            @input="updateValue"
+        ></textarea>
         <input
+            v-else
             :id="id"
             class="input"
-            :v-model="modelValue"
             :type="type"
             :placeholder="placeholder"
             :required="required"
+            :value="modelValue"
             @input="updateValue"
         />
     </label>
@@ -56,11 +75,17 @@
             margin-left: 0.5rem;
         }
     }
+    .textarea {
+        resize: vertical;
+
+        scrollbar-width: thin;
+        scrollbar-color: var(--bg-purple-200) transparent;
+    }
     .input {
         color: var(--text-purple-700);
         font-size: var(--text-base);
 
-        border: 1px solid var(--border-purple-200);
+        border: 2px solid var(--border-purple-200);
         border-radius: var(--radius-2xl);
 
         padding: var(--padding-4);
@@ -90,6 +115,7 @@
         &:-webkit-autofill:active {
             -webkit-text-fill-color: var(--text-purple-700) !important;
             caret-color: var(--text-purple-700) !important;
+            -webkit-box-shadow: 0 0 0px 1000px var(--bg-white) inset !important;
         }
     }
 </style>

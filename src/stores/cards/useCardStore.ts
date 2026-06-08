@@ -11,6 +11,7 @@ import { useDateFormatter, useRequestState } from '@/composables';
 
 import {
     cardLevelsTSMap,
+    FIRST_LEVEL,
     type ICard,
     type ICreateCardPayload,
     type IUpdateCardPayload,
@@ -21,6 +22,12 @@ import {
 export const useCardStore = defineStore('cards', () => {
     const cards = ref<ICard[]>([]);
     const isEmptyCards = computed(() => cards.value.length === 0);
+    const isRepetitionCards = computed(() =>
+        cards.value.some((card) => {
+            const status = getStatusCard(card);
+            return status === 'ready' || status === 'overdue';
+        })
+    );
 
     const createState = useRequestState();
     const updateState = useRequestState();
@@ -47,6 +54,24 @@ export const useCardStore = defineStore('cards', () => {
         return sectionCards;
     };
 
+    const getWeekDay = (card: ICard) => {
+        return useDateFormat(card.repeatInfo.nextRepeat, 'dddd').value;
+    };
+
+    const getNotNewCards = () => {
+        return cards.value.filter((card) => {
+            return card.repeatInfo.level !== FIRST_LEVEL;
+        });
+    };
+
+    const getRepetitionCards = (): ICard[] => {
+        if (!isRepetitionCards.value) return [];
+        return cards.value.filter((card) => {
+            const status = getStatusCard(card);
+            return status === 'ready' || status === 'overdue';
+        });
+    };
+
     const getCountSectionCards = (sectionId: string) => {
         return cards.value.reduce((acc, card) => (card.sectionId === sectionId ? acc + 1 : acc), 0);
     };
@@ -71,9 +96,9 @@ export const useCardStore = defineStore('cards', () => {
 
     const getDateRepeatCard = (card: ICard) => {
         if (card.repeatInfo.level < 4) {
-            getTimeWithDate(card.repeatInfo.nextRepeat);
+            return getTimeWithDate(card.repeatInfo.nextRepeat);
         } else {
-            getDateOnly(card.repeatInfo.nextRepeat);
+            return getDateOnly(card.repeatInfo.nextRepeat);
         }
     };
 
@@ -82,7 +107,7 @@ export const useCardStore = defineStore('cards', () => {
     };
 
     const getLevelPercentCard = (card: ICard) => {
-        return cardLevelsTSMap[card.repeatInfo.level].percent;
+        return `${cardLevelsTSMap[card.repeatInfo.level].percent}%`;
     };
 
     const getStatusCard = (card: ICard): 'ready' | 'overdue' | ComputedRef<string> => {
@@ -117,6 +142,7 @@ export const useCardStore = defineStore('cards', () => {
         const returnLevel = cardLevelsTSMap[card.repeatInfo.level].returnLevel;
 
         const payload = {
+            forgetCount: card.repeatInfo.level === 0 ? 0 : card.forgetCount + 1,
             repeatInfo: {
                 level: returnLevel,
                 nextRepeat: cardLevelsTSMap[returnLevel].ts + tsNowUTC.value,
@@ -208,8 +234,10 @@ export const useCardStore = defineStore('cards', () => {
     return {
         isEmptyCards,
         tsNowUTC,
+        isRepetitionCards,
 
         getSectionCards,
+        getRepetitionCards,
         getCountSectionCards,
         getCountNewSectionCards,
         getCountOverdueSectionCards,
@@ -217,6 +245,8 @@ export const useCardStore = defineStore('cards', () => {
         getDateRepeatCard,
         getLevelPercentCard,
         getStatusCard,
+        getNotNewCards,
+        getWeekDay,
 
         setCards,
 

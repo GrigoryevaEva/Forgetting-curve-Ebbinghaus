@@ -1,7 +1,7 @@
 import { IAuthPayload } from '@/stores/auth';
 
 import { apiClient } from './base/fetch';
-import { IUserFromAPI } from './base/types';
+import { IDemoUserFromAPI, IUserFromAPI } from './base/types';
 
 export const AuthApi = {
     async login(payload: IAuthPayload): Promise<IUserFromAPI> {
@@ -20,6 +20,11 @@ export const AuthApi = {
 
     async check(): Promise<IUserFromAPI> {
         const response = await apiClient.get<IUserFromAPI>('/api/auth/me');
+        return response;
+    },
+
+    async testLogin(): Promise<IDemoUserFromAPI> {
+        const response = await apiClient.post<IDemoUserFromAPI>('/api/auth/demo');
         return response;
     },
 };

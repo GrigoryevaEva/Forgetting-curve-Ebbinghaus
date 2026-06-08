@@ -18,4 +18,6 @@ export type TIconName =
     | 'rotate'
     | 'trendingUp'
     | 'logout'
-    | 'briefcase';
+    | 'briefcase'
+    | 'brain'
+    | 'eye';

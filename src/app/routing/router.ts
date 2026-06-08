@@ -1,7 +1,7 @@
 import Auth from '@pages/Auth/Auth.vue';
 import Cards from '@pages/Cards/Cards.vue';
-import Plan from '@pages/Plan.vue';
-import Repetition from '@pages/Repetition.vue';
+import Plan from '@pages/Plan/Plan.vue';
+import Repetition from '@pages/Repetition/Repetition.vue';
 import Sections from '@pages/Sections/Sections.vue';
 import Logger from 'js-logger';
 

@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
     const logoutState = useRequestState();
     const registerState = useRequestState();
     const checkAuthState = useRequestState();
+    const testLoginState = useRequestState();
 
     const setUserInfo = (info: IUser) => {
         id.value = info.id;
@@ -88,6 +89,23 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
+    const testLogin = async () => {
+        try {
+            testLoginState.startRequest();
+            const response = await AuthApi.testLogin();
+            await login({
+                email: response.user.email,
+                password: response.password,
+            });
+            Logger.info(`Successfully test login`);
+            testLoginState.successRequest();
+        } catch (e) {
+            const error = e as IApiError;
+            testLoginState.errorRequest();
+            Logger.error(`Test Login Failed ${error.message}`);
+        }
+    };
+
     return {
         email,
         isAuth,
@@ -103,5 +121,8 @@ export const useAuthStore = defineStore('auth', () => {
 
         checkAuth,
         checkAuthState,
+
+        testLogin,
+        testLoginState,
     };
 });

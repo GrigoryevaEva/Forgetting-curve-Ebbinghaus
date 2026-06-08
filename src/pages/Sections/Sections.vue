@@ -1,33 +1,67 @@
 <script setup lang="ts">
-    import { useSectionStore } from '@/stores/sections';
+    import { ref } from 'vue';
+
+    import { useCardStore } from '@/stores/cards';
+    import { ISection, useSectionStore } from '@/stores/sections';
 
     import IconSprite from '@/shared/ui/assets/icons/IconSprite.vue';
     import CustomButton from '@/shared/ui/components/CustomButton.vue';
+    import CustomText from '@/shared/ui/components/CustomText.vue';
 
     import { useModalController } from '@/composables';
 
-    import CreateModal from './components/CreateModal.vue';
-    import SectionTile from './components/SectionTile.vue';
+    import Modal from './components/Modal.vue';
+    import Section from './components/Section.vue';
     import TimeRepetitionLabel from './components/TimeRepetitionLabel.vue';
 
+    const cardStore = useCardStore();
     const sectionStore = useSectionStore();
 
     const { isOpen: isOpenModal, open, close, toggle } = useModalController();
+
+    const typeModal = ref<'create' | 'update'>('create');
+    const curUpdateSection = ref<ISection | null>(null);
+    const handleToggleCreateModal = () => {
+        if (isOpenModal.value && typeModal.value === 'update') {
+            typeModal.value = 'create';
+            return;
+        }
+        toggle();
+    };
+
+    const handleOpenUpdateModal = (section: ISection) => {
+        typeModal.value = 'update';
+        curUpdateSection.value = section;
+        open();
+    };
+
+    const handleCloseModal = () => {
+        if (curUpdateSection.value) curUpdateSection.value = null;
+        close();
+    };
 </script>
 
 <template>
-    <TimeRepetitionLabel />
-    <div class="controlContainer">
-        <h2>Мои разделы</h2>
-        <CustomButton
-            icon="plus"
-            text="Новый раздел"
-            :when-click="toggle"
-        />
+    <div class="sectionsHeader">
+        <TimeRepetitionLabel v-if="cardStore.isRepetitionCards" />
+        <div class="controlContainer">
+            <CustomText
+                text="Мои разделы"
+                type="header"
+            />
+            <CustomButton
+                icon="plus"
+                text="Новый раздел"
+                :when-click="handleToggleCreateModal"
+            />
+        </div>
     </div>
-    <CreateModal
+    <Modal
         v-if="isOpenModal"
-        :when-close="close"
+        :class="cardStore.isRepetitionCards ? 'marginXl' : 'margin'"
+        :type="typeModal"
+        :section="curUpdateSection"
+        :when-close="handleCloseModal"
     />
     <div
         v-if="sectionStore.isEmptySections && !isOpenModal"
@@ -37,7 +71,10 @@
             name="folderOpen"
             class="icon"
         />
-        <p>Создайте первый раздел для ваших карточек</p>
+        <CustomText
+            text="Создайте первый раздел для ваших карточек"
+            size="lg"
+        />
         <CustomButton
             icon="plus"
             class="createButton"
@@ -45,10 +82,35 @@
             :when-click="open"
         />
     </div>
-    <SectionTile v-else />
+    <div
+        v-else
+        class="sectionTile"
+        :class="{
+            ['margin']: !isOpenModal && !cardStore.isRepetitionCards,
+            ['marginXl']: !isOpenModal && cardStore.isRepetitionCards,
+        }"
+    >
+        <Section
+            v-for="section in sectionStore.sections"
+            :key="section.id"
+            :section="section"
+            :when-get-update-section="handleOpenUpdateModal"
+        />
+    </div>
 </template>
 
 <style scoped lang="scss">
+    .sectionsHeader {
+        position: absolute;
+        left: 0;
+        right: 0;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-6);
+
+        padding: 0 2.5rem;
+    }
     .controlContainer {
         display: flex;
         align-items: center;
@@ -77,5 +139,19 @@
             height: 4rem;
             width: 4rem;
         }
+    }
+
+    .sectionTile {
+        display: flex;
+        gap: var(--gap-4);
+        flex-wrap: wrap;
+    }
+
+    .margin {
+        margin-top: 5rem;
+    }
+
+    .marginXl {
+        margin-top: 12rem;
     }
 </style>

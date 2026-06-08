@@ -1,9 +1,7 @@
 <script setup lang="ts">
-    import { computed } from 'vue';
-
     import CustomButton from './CustomButton.vue';
 
-    type Theme = 'main' | 'yellow' | 'red';
+    type Theme = 'main' | 'ready' | 'overdue';
     interface Props {
         hover?: boolean;
         theme?: Theme;
@@ -17,8 +15,6 @@
         whenEdit: undefined,
         whenDelete: undefined,
     });
-
-    const isBorder = computed(() => props.theme !== 'main');
 </script>
 
 <template>
@@ -26,7 +22,7 @@
         class="customButton"
         :class="{
             ['rootHover']: hover,
-            [`${theme}Border`]: isBorder,
+            [theme]: theme !== 'main',
         }"
     >
         <div class="content">
@@ -65,6 +61,7 @@
 
         .buttonsContainer {
             display: flex;
+            gap: var(--gap-2);
 
             width: fit-content;
             height: fit-content;
@@ -72,13 +69,13 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
+    }
+    .ready {
+        border: 1px var(--bg-yellow-300) solid;
+    }
 
-        $colors: yellow, red;
-        @each $color in $colors {
-            .#{$color}Border {
-                border: 1px solid var(--bg-#{$color}-300);
-            }
-        }
+    .overdue {
+        border: 1px var(--bg-pink-300) solid;
     }
     .rootHover {
         display: flex;

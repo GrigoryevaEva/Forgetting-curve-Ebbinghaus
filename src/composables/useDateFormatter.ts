@@ -22,8 +22,17 @@ export const useDateFormatter = () => {
         return `${time} (${datePart})`;
     };
 
+    const getDayMonth = (ts: number) => {
+        const date = new Date(ts);
+        return date.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+        });
+    };
+
     return {
         getDateOnly,
         getTimeWithDate,
+        getDayMonth,
     };
 };

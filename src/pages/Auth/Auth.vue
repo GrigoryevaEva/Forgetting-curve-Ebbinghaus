@@ -8,6 +8,7 @@
 
     import CustomButton from '@/shared/ui/components/CustomButton.vue';
     import CustomInput from '@/shared/ui/components/CustomInput.vue';
+    import CustomText from '@/shared/ui/components/CustomText.vue';
     import LogoContainer from '@/shared/ui/components/LogoContainer.vue';
 
     const selectTab = ref<'login' | 'register'>('login');
@@ -35,6 +36,11 @@
     const handleChangeTabOnLogin = () => (selectTab.value = 'login');
     const handleChangeTabOnRegister = () => (selectTab.value = 'register');
 
+    const handleTestLogin = async () => {
+        await authStore.testLogin();
+        if (authStore.testLoginState.isSuccess) router.push(HOME_PATH);
+    };
+
     const buttonText = computed(() =>
         selectTab.value === 'login' ? 'Войти' : 'Зарегестрирвоаться'
     );
@@ -51,14 +57,20 @@
                     :class="{ selectTab: selectTab === 'login' }"
                     @click="handleChangeTabOnLogin"
                 >
-                    Вход
+                    <CustomText
+                        class="text"
+                        text="Вход"
+                    />
                 </div>
                 <div
                     class="tab"
                     :class="{ selectTab: selectTab === 'register' }"
                     @click="handleChangeTabOnRegister"
                 >
-                    Регистрация
+                    <CustomText
+                        class="text"
+                        text="Регистрация"
+                    />
                 </div>
             </div>
 
@@ -67,7 +79,7 @@
                     id="login"
                     v-model="formData.email"
                     label="Логин"
-                    type="email"
+                    type="text"
                     placeholder="Ваш логин"
                     required
                 />
@@ -86,19 +98,29 @@
                 />
             </form>
 
-            <p class="textSeparator">или</p>
-
-            <CustomButton
-                icon="briefcase"
-                class="testLoginButton"
-                theme="transparent"
-                text="Тестовый вход"
-                size="200"
+            <CustomText
+                class="textSeparator"
+                text="или"
+                size="xs"
             />
-            <p class="textHint">
-                Для работодателей: используйте тестовый вход для быстрого доступа к портфолио без
-                регистрации
-            </p>
+
+            <div class="testLoginContainer">
+                <CustomButton
+                    icon="briefcase"
+                    class="testLoginButton"
+                    theme="transparent"
+                    :shadow="false"
+                    text="Тестовый вход"
+                    size="200"
+                    :when-click="handleTestLogin"
+                />
+                <CustomText
+                    class="textHint"
+                    text="Для работодателей: используйте тестовый вход для быстрого доступа к портфолио без
+                регистрации"
+                    size="xs"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -119,23 +141,32 @@
             justify-content: center;
             gap: var(--gap-7);
 
-            width: 60vw;
+            width: 30rem;
 
-            padding: var(--padding-6);
+            background-color: var(--bg-white);
+            border-radius: var(--radius-3xl);
+
+            padding: var(--padding-8) var(--padding-6);
+
+            box-shadow: var(--shadow-lg);
 
             .tabsContainer {
                 display: flex;
                 align-items: center;
                 gap: var(--gap-2);
 
-                height: 2.125rem;
+                height: 3.25rem;
                 width: 100%;
+
+                background-color: var(--bg-purple-50);
+
+                border-radius: var(--radius-lg);
 
                 .tab {
                     flex: 1;
                     align-content: center;
                     text-align: center;
-                    height: 100%;
+                    height: 90%;
 
                     color: var(--text-purple-630);
 
@@ -143,23 +174,57 @@
 
                     cursor: pointer;
 
-                    &:hover {
-                        background-color: var(--bg-purple-200);
-                        transition: all 0.2s;
+                    .text {
+                        color: var(--text-purple-700);
                     }
                 }
 
                 .selectTab {
-                    color: var(--text-purple-700);
+                    background-color: var(--bg-white);
+                    box-shadow: var(--shadow-md);
 
                     transition: all 0.2s;
                 }
             }
 
+            .testLoginContainer {
+                display: flex;
+                flex-direction: column;
+                gap: var(--gap-2);
+            }
             .submitButton,
             .testLoginButton {
                 border-radius: var(--radius-2xl);
                 width: 100%;
+            }
+            .testLoginButton {
+                border: 2px var(--border-purple-200) solid;
+            }
+            .submitButton {
+                background-image: linear-gradient(
+                    0.25turn,
+                    var(--bg-purple-400),
+                    var(--bg-pink-500),
+                    var(--bg-purple-400)
+                );
+
+                background-size: 200% 100%;
+                background-position: 0% 0%;
+                transition: transform 0.2s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    animation: spinGradient 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                }
+
+                @keyframes spinGradient {
+                    0% {
+                        background-position: 0% 0%;
+                    }
+                    100% {
+                        background-position: 200% 0%;
+                    }
+                }
             }
 
             .textSeparator,

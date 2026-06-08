@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import IconSprite from '@shared/ui/assets/icons/IconSprite.vue';
 
+    import CustomText from '@/shared/ui/components/CustomText.vue';
+
     import { useBreakpoints } from '@/composables';
 
     import { navItems } from './constants';
@@ -24,7 +26,10 @@
                 :name="item.icon"
                 class="icon"
             />
-            <p>{{ item.name }}</p>
+            <CustomText
+                class="itemText"
+                :text="item.name"
+            />
         </RouterLink>
     </nav>
 </template>
@@ -34,7 +39,8 @@
         display: flex;
         gap: var(--gap-2);
         justify-content: end;
-
+    }
+    .navMobile {
         width: 100%;
     }
     .item {
@@ -49,11 +55,11 @@
         transition: all 0.2s;
     }
     .item:hover {
-        background-color: var(--bg-purple-200);
+        background-color: var(--bg-purple-50);
         transition: all 0.2s;
     }
     .item.router-link-exact-active {
-        background-color: var(--bg-purple-200);
+        background-color: var(--bg-purple-100);
         transition: all 0.2s;
     }
     .itemMobile {
@@ -67,7 +73,7 @@
         width: 1rem;
     }
     .icon,
-    .item {
+    .itemText {
         color: var(--text-purple-700);
     }
 </style>
