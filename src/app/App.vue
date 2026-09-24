@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
-    import { useRoute } from 'vue-router';
+    import { onMounted, watch } from 'vue';
+    import { useRouter } from 'vue-router';
 
     import { useAppStore } from '@/stores/app';
     import { useAuthStore } from '@/stores/auth';
@@ -11,31 +11,24 @@
 
     import { useBreakpoints } from '@/composables';
 
-    import { AUTH_PATH } from './routing/constants';
+    import { AUTH_PATH, HOME_PATH } from './routing/constants';
     import Navigation from './routing/Navigation.vue';
 
     const { isMobileAndTablet } = useBreakpoints();
 
+    const router = useRouter();
+
     const authStore = useAuthStore();
     const appStore = useAppStore();
-    const route = useRoute();
 
-    const isLoginPage = ref(false);
-    watch(
-        () => route.fullPath,
-        (newValue) => {
-            if (newValue === AUTH_PATH) {
-                isLoginPage.value = true;
-            } else {
-                isLoginPage.value = false;
-            }
-        }
-    );
+    onMounted(() => authStore.checkAuth());
+
     watch(
         () => authStore.isAuth,
         (newValue) => {
             if (newValue) {
                 appStore.initialize();
+                router.push(HOME_PATH);
             }
         }
     );
@@ -43,7 +36,7 @@
 
 <template>
     <header
-        v-if="!isLoginPage"
+        v-if="authStore.isAuth"
         :class="{ headerMobile: isMobileAndTablet }"
     >
         <LogoContainer />
@@ -69,7 +62,7 @@
         <RouterView />
     </main>
 
-    <footer v-if="isMobileAndTablet && !isLoginPage">
+    <footer v-if="isMobileAndTablet && authStore.isAuth">
         <Navigation />
     </footer>
 </template>

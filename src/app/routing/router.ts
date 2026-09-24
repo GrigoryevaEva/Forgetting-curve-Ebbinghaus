@@ -3,14 +3,11 @@ import Cards from '@pages/Cards/Cards.vue';
 import Plan from '@pages/Plan/Plan.vue';
 import Repetition from '@pages/Repetition/Repetition.vue';
 import Sections from '@pages/Sections/Sections.vue';
-import Logger from 'js-logger';
 
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
 import { useSectionStore } from '@/stores/sections';
-
-import { IApiError } from '@/api/base';
 
 const routes = [
     {
@@ -22,6 +19,17 @@ const routes = [
         path: '/login',
         component: Auth,
         meta: { requiresAuth: false, isPublic: true },
+        beforeEnter: async (to, from, next) => {
+            const authStore = useAuthStore();
+
+            if (authStore.isAuth) {
+                next({
+                    path: '/',
+                });
+            } else {
+                next();
+            }
+        },
     },
     {
         path: '/sections/:id/cards',
@@ -65,16 +73,9 @@ router.beforeEach(async (to, from, next) => {
 
     const authStore = useAuthStore();
 
-    try {
-        await authStore.checkAuth();
-        if (authStore.isAuth) {
-            next();
-        } else {
-            next('/login');
-        }
-    } catch (e) {
-        const error = e as IApiError;
-        Logger.error(`Check auth failed. Routing closed. Fail: ${error.message}`);
+    if (authStore.isAuth) {
+        next();
+    } else {
         next('/login');
     }
 });
