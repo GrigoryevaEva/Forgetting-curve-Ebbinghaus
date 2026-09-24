@@ -2,6 +2,9 @@ import Logger from 'js-logger';
 
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { AUTH_PATH } from '@/app/routing/constants';
 
 import { AuthApi } from '@/api';
 import { IApiError } from '@/api/base';
@@ -19,6 +22,8 @@ export const useAuthStore = defineStore('auth', () => {
     const registerState = useRequestState();
     const checkAuthState = useRequestState();
     const testLoginState = useRequestState();
+
+    const router = useRouter();
 
     const setUserInfo = (info: IUser) => {
         id.value = info.id;
@@ -41,7 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
             loginState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            loginState.errorRequest();
+            loginState.errorRequest(error.status);
             Logger.error(`Login Failed ${error.message}`);
         }
     };
@@ -55,7 +60,7 @@ export const useAuthStore = defineStore('auth', () => {
             logoutState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            logoutState.errorRequest();
+            logoutState.errorRequest(error.status);
             Logger.error(`Logout Failed ${error.message}`);
         }
     };
@@ -69,22 +74,20 @@ export const useAuthStore = defineStore('auth', () => {
             registerState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            registerState.errorRequest();
+            registerState.errorRequest(error.status);
             Logger.error(`Register Failed ${error.message}`);
         }
     };
 
     const checkAuth = async () => {
         try {
-            checkAuthState.startRequest();
             const response = await AuthApi.check();
             setUserInfo(response);
             Logger.info(`Successfully checkAuth`);
-            checkAuthState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            checkAuthState.errorRequest();
             resetUserInfo();
+            router.push(AUTH_PATH);
             Logger.error(`CheckAuth Failed ${error.message}`);
         }
     };
@@ -101,7 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
             testLoginState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            testLoginState.errorRequest();
+            testLoginState.errorRequest(error.status);
             Logger.error(`Test Login Failed ${error.message}`);
         }
     };

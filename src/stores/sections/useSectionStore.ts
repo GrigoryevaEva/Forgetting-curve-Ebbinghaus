@@ -54,7 +54,7 @@ export const useSectionStore = defineStore('sections', () => {
             createState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            createState.errorRequest();
+            createState.errorRequest(error.status);
             Logger.error(`Error api request createSection ${error.message}`);
         }
     };
@@ -77,7 +77,7 @@ export const useSectionStore = defineStore('sections', () => {
             updateState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            updateState.errorRequest();
+            updateState.errorRequest(error.status);
             Logger.error(`Error api request updateSection ${error.message}`);
         }
     };
@@ -101,7 +101,7 @@ export const useSectionStore = defineStore('sections', () => {
             deleteState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            deleteState.errorRequest();
+            deleteState.errorRequest(error.status);
             Logger.error(`Error api request deleteSection ${error.message}`);
         }
     };

@@ -13,6 +13,13 @@ export interface IApiError {
     code?: string;
 }
 
+export enum ErrorStatusCodes {
+    server = 500,
+    auth = 401,
+    forbidden = 403,
+    validation = 422,
+}
+
 export interface IUserFromAPI {
     id: string;
     email: string;

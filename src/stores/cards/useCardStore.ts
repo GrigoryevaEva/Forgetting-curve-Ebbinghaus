@@ -176,7 +176,7 @@ export const useCardStore = defineStore('cards', () => {
             createState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            createState.errorRequest();
+            createState.errorRequest(error.status);
             Logger.error(`Error api request createCard ${error.message}`);
         }
     };
@@ -197,7 +197,7 @@ export const useCardStore = defineStore('cards', () => {
             updateState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            updateState.errorRequest();
+            updateState.errorRequest(error.status);
             Logger.error(`Error api request updateCard ${error.message}`);
         }
     };
@@ -217,7 +217,7 @@ export const useCardStore = defineStore('cards', () => {
             deleteState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            deleteState.errorRequest();
+            deleteState.errorRequest(error.status);
             Logger.error(`Error api request deleteCard ${error.message}`);
         }
     };

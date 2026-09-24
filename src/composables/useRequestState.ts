@@ -1,5 +1,9 @@
 import { ref } from 'vue';
 
+import { useAuthStore } from '@/stores/auth';
+
+import { ErrorStatusCodes } from '@/api/base';
+
 export const useRequestState = () => {
     const isSuccess = ref(false);
     const isLoading = ref(false);
@@ -7,6 +11,8 @@ export const useRequestState = () => {
     const timerId = ref<number | null>(null);
 
     const DELAY = 3000;
+
+    const authStore = useAuthStore();
 
     const successRequest = () => {
         isSuccess.value = true;
@@ -17,13 +23,16 @@ export const useRequestState = () => {
         isLoading.value = true;
     };
 
-    const errorRequest = () => {
+    const errorRequest = (statusCode: number) => {
         isError.value = true;
         isLoading.value = false;
         if (timerId.value) clearTimeout(timerId.value);
         timerId.value = setTimeout(() => {
             reset();
         }, DELAY);
+        if (statusCode === ErrorStatusCodes.auth || statusCode === ErrorStatusCodes.forbidden) {
+            authStore.checkAuth();
+        }
     };
 
     const reset = () => {

@@ -26,7 +26,7 @@ export const useAppStore = defineStore('app', () => {
             initializeState.successRequest();
         } catch (e) {
             const error = e as IApiError;
-            initializeState.errorRequest();
+            initializeState.errorRequest(error.status);
             Logger.error(`Error api request initialize ${error.message}`);
         }
     };
